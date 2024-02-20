@@ -1,0 +1,72 @@
+mysql:
+    host: 127.0.0.1
+    port: 3306
+    config: "charset=utf8mb4&parseTime=True&loc=Local"
+    db: gvb_db
+    user: root
+    password: "123456"
+    log_level: dev
+logger:
+    level: info
+    prefix: gvb
+    director: log
+    show_line: true
+    log_in_console: true
+system:
+    host: 0.0.0.0
+    port: 8080
+    env: release
+upload:
+    size: 2
+    path: static/uploads
+site_info:
+    created_at: "2023-12-18"
+    bei_an: 京ICP备2021000000号-1
+    title: qj的个人博客
+    qq_image: http://www.fengfengzhidao.com/static/my/img/footer/qq.png
+    version: 1.0.0
+    email: 1429030919@qq.com
+    wechat_image: http://www.fengfengzhidao.com/static/my/img/footer/wechat.png
+    name: 小新qj
+    job: 后端开发工程师
+    addr: 陕西西安
+    slogan: 一切皆有可能
+    slogan_en: Everything is possible
+    web: http://www.fengfengzhidao.com
+    bilibili: https://space.bilibili.com/37807841
+    github: https://github.com/qj1204
+email:
+    host: smtp.qq.com
+    port: 465
+    user: 1429030919@qq.com
+    password: "mtzlanmdmtcwhbae"
+    default_from_email: 小新
+    use_ssl: true
+    user_tls: false
+qq:
+    app_id: xx
+    key: xx
+    redirect: http://xx.xx.com/login?flag=qq
+qi_niu:
+    enable: false
+    access_key: lWi_q36PtaaEnIzcOKy-yFmK1VmbOIQY_ygsOiHF
+    secret_key: LbjcW0Bdy7u11R8lIDJ72cq6kAUuWkYhaXTvNu2m
+    bucket: xiaoxinqj
+    cdn: http://s5x2fcgbb.hn-bkt.clouddn.com/
+    zone: z2
+    prefix: "gvb"
+    size: 5
+jwt:
+    secret: xxx
+    expires: 48
+    issuer: "bella"
+redis:
+    ip: 127.0.0.1
+    port: 6379
+    password: 123456
+    pool_size: 100
+es:
+    host: "http://127.0.0.1"
+    port: 9200
+    user:
+    password:
