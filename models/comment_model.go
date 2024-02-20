@@ -14,7 +14,7 @@ type CommentModel struct {
 	CommentCount int    `gorm:"size:8;default:0;comment:'评论量'" json:"comment_count"` // 子评论量
 
 	// --------文章 一对多 评论--------
-	ArticleID string `gorm:"comment:'评论文章ID'" json:"article_id"` // 评论文章ID
+	ArticleID string `gorm:"size:32;comment:'评论文章ID'" json:"article_id"` // 评论文章ID
 
 	// --------评论 belongs to 用户--------
 	UserID uint      `gorm:"comment:'评论用户ID'" json:"user_id"` // 评论关联的用户ID
