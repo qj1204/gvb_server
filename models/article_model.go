@@ -9,7 +9,7 @@ import (
 
 // ArticleModel 文章表
 type ArticleModel struct {
-	ID        uint   `json:"id"`         // es的id
+	ID        string `json:"id"`         // es的id
 	CreatedAt string `json:"created_at"` // 创建时间
 	UpdatedAt string `json:"updated_at"` // 更新时间
 
@@ -161,5 +161,21 @@ func (this ArticleModel) RemoveIndex() error {
 		return err
 	}
 	logrus.Info("删除索引成功")
+	return nil
+}
+
+// Create 创建文章
+func (this ArticleModel) Create() (err error) {
+	indexResponse, err := global.ESClient.
+		Index().
+		Index(this.Index()).
+		BodyJson(this).
+		Do(context.Background())
+	if err != nil {
+		logrus.Errorf("添加索引失败，%s", err.Error())
+		return err
+	}
+	logrus.Infof("添加索引成功，%#v", indexResponse)
+	this.ID = indexResponse.Id
 	return nil
 }

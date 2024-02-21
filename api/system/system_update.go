@@ -56,6 +56,22 @@ func (this *SystemApi) SystemInfoUpdateView(c *gin.Context) {
 			return
 		}
 		global.Config.Email = info
+	case "redis":
+		var info config.Redis
+		err = c.ShouldBindJSON(&info)
+		if err != nil {
+			response.FailWithCode(response.ArgumentError, c)
+			return
+		}
+		global.Config.Redis = info
+	case "es":
+		var info config.ES
+		err = c.ShouldBindJSON(&info)
+		if err != nil {
+			response.FailWithCode(response.ArgumentError, c)
+			return
+		}
+		global.Config.ES = info
 	default:
 		response.FailWithMessage("未找到对应的配置", c)
 		return

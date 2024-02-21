@@ -21,18 +21,18 @@ upload:
     path: static/uploads
 site_info:
     created_at: "2023-12-18"
-    bei_an: 京ICP备2021000000号-1
+    bei_an: 陕ICP备2023003838号-1
     title: qj的个人博客
-    qq_image: http://www.fengfengzhidao.com/static/my/img/footer/qq.png
+    qq_image: https://qiniu.xiaoxinqj.top/static/my/img/QQ.jpg
     version: 1.0.0
     email: 1429030919@qq.com
-    wechat_image: http://www.fengfengzhidao.com/static/my/img/footer/wechat.png
+    wechat_image: https://qiniu.xiaoxinqj.top/static/my/img/WeChat.jpg
     name: 小新qj
     job: 后端开发工程师
     addr: 陕西西安
     slogan: 一切皆有可能
     slogan_en: Everything is possible
-    web: http://www.fengfengzhidao.com
+    web: http://xiaoxinqj.top
     bilibili: https://space.bilibili.com/37807841
     github: https://github.com/qj1204
 email:
@@ -52,14 +52,14 @@ qi_niu:
     access_key: lWi_q36PtaaEnIzcOKy-yFmK1VmbOIQY_ygsOiHF
     secret_key: LbjcW0Bdy7u11R8lIDJ72cq6kAUuWkYhaXTvNu2m
     bucket: xiaoxinqj
-    cdn: http://s5x2fcgbb.hn-bkt.clouddn.com/
+    cdn: http://qiniu.xiaoxinqj.top/
     zone: z2
     prefix: "gvb"
     size: 5
 jwt:
-    secret: xxx
+    secret: qj
     expires: 48
-    issuer: "bella"
+    issuer: "admin"
 redis:
     ip: 127.0.0.1
     port: 6379

@@ -28,6 +28,10 @@ func (this *SystemApi) SystemInfoView(c *gin.Context) {
 		response.OkWithData(global.Config.QiNiu, c)
 	case "email":
 		response.OkWithData(global.Config.Email, c)
+	case "redis":
+		response.OkWithData(global.Config.Redis, c)
+	case "es":
+		response.OkWithData(global.Config.ES, c)
 	default:
 		response.FailWithMessage("未找到对应的配置", c)
 	}
