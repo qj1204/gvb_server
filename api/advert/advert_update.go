@@ -16,7 +16,7 @@ import (
 // @Router /api/advert/:id [put]
 // @Produce json
 // @Success 200 {object} response.Response{data=string}
-func (*AdvertApi) AdvertUpdateView(c *gin.Context) {
+func (this *AdvertApi) AdvertUpdateView(c *gin.Context) {
 	id := c.Param("id")
 	var cr AdvertRequest
 	err := c.ShouldBindJSON(&cr)

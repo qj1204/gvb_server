@@ -17,7 +17,7 @@ type ImageResponse struct {
 // @Tags 图片管理
 // @Summary 图片名称列表
 // @Description 图片名称列表
-// @Router /api/image_names [get]
+// @Router /api/image_name [get]
 // @Produce json
 // @Success 200 {object} response.Response{data=[]ImageResponse}
 func (this *ImageApi) ImageNameListView(c *gin.Context) {

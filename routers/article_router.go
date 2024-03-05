@@ -9,7 +9,7 @@ import (
 type ArticleRouter struct{}
 
 func (this *ArticleRouter) InitArticleRouter(router *gin.RouterGroup) {
-	articleApiGroup := api.ApiGroupApp.ArticleApiGroup
-	router.POST("/article", middleware.JwtAuth(), articleApiGroup.ArticleCreateView)
-
+	apiGroup := api.ApiGroupApp.ArticleApiGroup
+	router.POST("/article", middleware.JwtAuth(), apiGroup.ArticleCreateView)
+	router.GET("/article", apiGroup.ArticleListView)
 }

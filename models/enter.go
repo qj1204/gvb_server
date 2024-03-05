@@ -9,10 +9,10 @@ type MODEL struct {
 }
 
 type Page struct {
-	PageNum int    `form:"page_num"`
-	Key     string `form:"key"`
-	Limit   int    `form:"limit"`
-	Sort    string `form:"sort"`
+	PageNum int    `form:"page_num"` // 页码
+	Key     string `form:"key"`      // 关键字
+	Limit   int    `form:"limit"`    // 每页显示条数
+	Sort    string `form:"sort"`     // 排序
 }
 
 type RemoveRequest struct {

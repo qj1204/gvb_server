@@ -13,7 +13,7 @@ var (
 	Config   *config.Config
 	DB       *gorm.DB
 	Log      *logrus.Logger
-	MysqlLog logger.Interface
+	MysqlLog logger.Interface // MysqlLog显示所有的sql
 	Redis    *redis.Client
 	ESClient *elastic.Client
 )

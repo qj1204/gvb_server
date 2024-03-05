@@ -12,14 +12,14 @@ type Response struct {
 	Msg  string `json:"msg"`
 }
 
-type ListResponse[T any] struct {
+type ListResponse struct {
 	Count int64 `json:"count"`
-	List  T     `json:"list"`
+	List  any   `json:"list"`
 }
 
 const (
-	SUCCESS = 0
-	ERROR   = 7
+	SUCCESS = 100
+	ERROR   = 111
 )
 
 func Result(code int, data any, msg string, c *gin.Context) {
@@ -39,7 +39,11 @@ func OkWithData(data any, c *gin.Context) {
 }
 
 func OkWithList(list any, count int64, c *gin.Context) {
-	OkWithData(ListResponse[any]{count, list}, c)
+	lr := ListResponse{
+		Count: count,
+		List:  list,
+	}
+	OkWithData(lr, c)
 }
 
 func OkWithMessage(msg string, c *gin.Context) {
@@ -63,8 +67,8 @@ func FailWithError(err error, obj any, c *gin.Context) {
 	FailWithMessage(msg, c)
 }
 
-func FailWithCode(code ErrCode, c *gin.Context) {
-	if msg, ok := ErrorMap[code]; ok {
+func FailWithCode(code gin.ErrorType, c *gin.Context) {
+	if msg, ok := GinErrorMap[code]; ok {
 		Result(int(code), map[string]any{}, msg, c)
 		return
 	}

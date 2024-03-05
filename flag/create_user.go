@@ -8,8 +8,6 @@ import (
 )
 
 func CreateUser(permission string) {
-	// 创建用户的逻辑
-
 	// 用户名 昵称 密码 确认密码 邮箱
 	var (
 		userName   string
@@ -19,15 +17,15 @@ func CreateUser(permission string) {
 		email      string
 	)
 	fmt.Printf("请输入用户名：")
-	fmt.Scan(&userName)
+	fmt.Scanln(&userName)
 	fmt.Printf("请输入昵称：")
-	fmt.Scan(&nickName)
+	fmt.Scanln(&nickName)
 	fmt.Printf("请输入密码：")
-	fmt.Scan(&password)
+	fmt.Scanln(&password)
 	fmt.Printf("请确认密码：")
-	fmt.Scan(&rePassword)
+	fmt.Scanln(&rePassword)
 	fmt.Printf("请输入邮箱：")
-	fmt.Scan(&email)
+	fmt.Scanln(&email)
 
 	// 判断密码是否一致
 	if password != rePassword {

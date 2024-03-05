@@ -12,7 +12,7 @@ func (this *ImageApi) ImageRemoveView(c *gin.Context) {
 	var cr models.RemoveRequest
 	err := c.ShouldBindJSON(&cr)
 	if err != nil {
-		response.FailWithCode(response.ArgumentError, c)
+		response.FailWithCode(gin.ErrorTypeBind, c)
 		return
 	}
 

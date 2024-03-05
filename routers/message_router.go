@@ -9,10 +9,9 @@ import (
 type MessageRouter struct{}
 
 func (this *MessageRouter) InitMessageRouter(router *gin.RouterGroup) {
-	messageApiGroup := api.ApiGroupApp.MessageApiGroup
-	router.POST("/message", middleware.JwtAuth(), messageApiGroup.MessageCreateView)
-	router.GET("/message_all", middleware.JwtAdmin(), messageApiGroup.MessageListAllView)
-	router.GET("/message", middleware.JwtAuth(), messageApiGroup.MessageListView)
-	router.GET("/message_record", middleware.JwtAuth(), messageApiGroup.MessageRecordView)
-
+	apiGroup := api.ApiGroupApp.MessageApiGroup
+	router.POST("/message", middleware.JwtAuth(), apiGroup.MessageCreateView)
+	router.GET("/message_all", middleware.JwtAdmin(), apiGroup.MessageListAllView)
+	router.GET("/message", middleware.JwtAuth(), apiGroup.MessageListView)
+	router.GET("/message_record", middleware.JwtAuth(), apiGroup.MessageRecordView)
 }

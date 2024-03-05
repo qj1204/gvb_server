@@ -15,20 +15,21 @@ func (this *UserApi) UserListView(c *gin.Context) {
 	claims := _claims.(*jwt.CustomClaims)
 	var page models.Page
 	if err := c.ShouldBindQuery(&page); err != nil {
-		response.FailWithCode(response.ArgumentError, c)
+		response.FailWithCode(gin.ErrorTypeBind, c)
 		return
 	}
 	var users []models.UserModel
 	list, count, _ := common.CommonList(models.UserModel{}, common.Option{
-		Page: page,
+		Page:  page,
+		Debug: true,
 	})
 
 	for _, user := range list {
 		if ctype.Role(claims.Role) != ctype.PermissionAdmin {
-			// 不是管理员
+			// 不是管理员，隐藏用户名
 			user.UserName = ""
 		}
-		// 脱敏
+		// 不管是不是管理员，电话和邮箱都要脱敏
 		user.Tel = desens.DesensitizationTel(user.Tel)
 		user.Email = desens.DesensitizationEmail(user.Email)
 

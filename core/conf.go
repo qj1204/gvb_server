@@ -21,6 +21,7 @@ func InitConf() {
 	}
 	err = yaml.Unmarshal(yamlConf, c)
 	if err != nil {
+		// 此时配置文件还没读取到，所以不能用自己的logrus
 		log.Fatalf("config Init Unmarshal: %v", err)
 	}
 	log.Println("config yamlFiles load Init success.")
@@ -37,6 +38,5 @@ func SetYaml() error {
 	if err != nil {
 		return err
 	}
-	global.Log.Info("配置文件修改成功")
 	return nil
 }

@@ -16,14 +16,15 @@ import (
 // @Router /api/advert [get]
 // @Produce json
 // @Success 200 {object} response.Response{data=response.ListResponse[models.AdvertModel]}
-func (*AdvertApi) AdvertListView(c *gin.Context) {
+func (this *AdvertApi) AdvertListView(c *gin.Context) {
 	var cr models.Page
 	err := c.ShouldBindQuery(&cr)
 	if err != nil {
-		response.FailWithCode(response.ArgumentError, c)
+		response.FailWithCode(gin.ErrorTypeBind, c)
 		return
 	}
 
+	// 判断请求头的Referer是否包含admin，如果包含，就返回所有广告；不是，就返回is_show=true的广告
 	referer := c.GetHeader("Referer")
 	isShow := true
 	if strings.Contains(referer, "admin") {

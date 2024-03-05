@@ -15,12 +15,13 @@ import (
 type BindEmailRequest struct {
 	Email    string  `json:"email" binding:"required,email" msg:"邮箱非法"`
 	Code     *string `json:"code"`
-	Password string  `json:"password"`
+	Password string  `json:"password"` // 绑定邮箱感觉不需要密码
 }
 
 func (this *UserApi) UserBindEmailView(c *gin.Context) {
 	_claims, _ := c.Get("claims")
 	claims := _claims.(*jwt.CustomClaims)
+
 	// 用户绑定邮箱，第一次输入是 邮箱
 	// 后台会给这个邮箱发送验证码
 	var cr BindEmailRequest
@@ -34,6 +35,7 @@ func (this *UserApi) UserBindEmailView(c *gin.Context) {
 		// 第一次，后台发送验证码，将验证码存入session
 		code := random.Code(4)
 		session.Set("valid_code", code)
+		session.Set("email", cr.Email)
 		err = session.Save()
 		if err != nil {
 			global.Log.Error(err)
@@ -49,9 +51,16 @@ func (this *UserApi) UserBindEmailView(c *gin.Context) {
 		response.OkWithData("验证码发送成功，请查收", c)
 		return
 	}
+
 	// 第二次，用户输入 邮箱 + 验证码 + 密码
-	code := session.Get("valid_code")
+	// 校验邮箱
+	email2 := session.Get("email")
+	if email2 != cr.Email {
+		response.FailWithMessage("邮箱错误", c)
+		return
+	}
 	// 校验验证码
+	code := session.Get("valid_code")
 	if code != *cr.Code {
 		response.FailWithMessage("验证码错误", c)
 		return

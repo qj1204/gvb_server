@@ -8,10 +8,10 @@ import (
 	"gvb_server/utils/jwt"
 )
 
+// JwtAuth 判断是否登录
 func JwtAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// 如何判断是管理员
-		token := c.Request.Header.Get("Token")
+		token := c.Request.Header.Get("token")
 		if token == "" {
 			response.FailWithMessage("未携带token", c)
 			c.Abort()
@@ -34,10 +34,10 @@ func JwtAuth() gin.HandlerFunc {
 	}
 }
 
+// JwtAdmin 判断是否为管理员
 func JwtAdmin() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// 如何判断是管理员
-		token := c.Request.Header.Get("Token")
+		token := c.Request.Header.Get("token")
 		if token == "" {
 			response.FailWithMessage("未携带token", c)
 			c.Abort()

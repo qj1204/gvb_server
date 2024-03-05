@@ -19,14 +19,16 @@ func (this *ImageApi) ImageListView(c *gin.Context) {
 	var cr models.Page
 	err := c.ShouldBindQuery(&cr)
 	if err != nil {
-		response.FailWithCode(response.ArgumentError, c)
+		response.FailWithCode(gin.ErrorTypeBind, c)
 		return
 	}
 
-	imageList, count, err := common.CommonList(models.BannerModel{}, common.Option{
-		Page:  cr,
-		Debug: true,
-	})
+	imageList, count, err := common.CommonList(
+		models.BannerModel{},
+		common.Option{
+			Page:  cr,
+			Debug: true, // 开启debug模式
+		})
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return

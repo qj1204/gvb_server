@@ -9,9 +9,9 @@ import (
 )
 
 type UserRole struct {
-	Role     ctype.Role `json:"role" binding:"required,oneof=1 2 3 4" msg:"权限参数错误"`
-	NickName string     `json:"nick_name"` // 防止用户昵称非法，管理员有能力修改
 	UserID   uint       `json:"user_id" binding:"required" msg:"用户id错误"`
+	NickName string     `json:"nick_name"` // 防止用户昵称非法，管理员有能力修改
+	Role     ctype.Role `json:"role" binding:"required,oneof=1 2 3 4" msg:"权限参数错误"`
 }
 
 func (this *UserApi) UserUpdataRoleView(c *gin.Context) {

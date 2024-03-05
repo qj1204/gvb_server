@@ -8,7 +8,7 @@ import (
 type SystemRouter struct{}
 
 func (this *SystemRouter) InitSystemRouter(router *gin.RouterGroup) {
-	systemApiGroup := api.ApiGroupApp.SystemApiGroup
-	router.GET("/system/:name", systemApiGroup.SystemInfoView)
-	router.PUT("/system/:name", systemApiGroup.SystemInfoUpdateView)
+	apiGroup := api.ApiGroupApp.SystemApiGroup
+	router.GET("/system/:name", apiGroup.SystemInfoView)
+	router.PUT("/system/:name", apiGroup.SystemInfoUpdateView)
 }

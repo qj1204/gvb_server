@@ -5,6 +5,8 @@ import (
 	"strings"
 )
 
+// 参考gorm代码的9_自定义类型_array.go
+
 type Array []string
 
 func (a *Array) Scan(value interface{}) error {

@@ -26,17 +26,18 @@ func (this *MenuApi) MenuUpdateView(c *gin.Context) {
 
 	// 先把之间的menu_banner清空
 	global.DB.Model(&menuModel).Association("Banners").Clear()
-	// 如果选择了图片，那就添加banner
+
+	// 如果选择了banner，那就添加banner
 	if len(cr.ImageSortList) > 0 {
-		var bannerList []models.MenuBannerModel
-		for _, imageSort := range cr.ImageSortList {
-			bannerList = append(bannerList, models.MenuBannerModel{
+		var menuBannerList []models.MenuBannerModel
+		for _, image := range cr.ImageSortList {
+			menuBannerList = append(menuBannerList, models.MenuBannerModel{
 				MenuID:   menuModel.ID,
-				BannerID: imageSort.ImageID,
-				Sort:     imageSort.Sort,
+				BannerID: image.ImageID,
+				Sort:     image.Sort,
 			})
 		}
-		err = global.DB.Create(&bannerList).Error
+		err = global.DB.Create(&menuBannerList).Error
 		if err != nil {
 			global.Log.Error(err)
 			response.FailWithMessage("菜单更新图片失败", c)

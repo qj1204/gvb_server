@@ -1,28 +1,19 @@
 package image
 
-import (
-	"github.com/gin-gonic/gin"
-	"gvb_server/global"
-	"gvb_server/models/common/response"
-	"gvb_server/service"
-	"gvb_server/service/image"
-	"os"
-)
-
-// ImageUploadView 上传图片，返回图片的url
-func (this *ImageApi) ImageUploadView(c *gin.Context) {
+// ImageUploadView 上传图片
+/*func (this *ImageApi) ImageUploadView(c *gin.Context) {
 	form, err := c.MultipartForm()
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	fileList, ok := form.File["images"]
+	fileHeaderList, ok := form.File["images"]
 	if !ok {
 		response.FailWithMessage("图片不存在", c)
 		return
 	}
 
-	// 判断路径是否存在
+	// 判断上传路径是否存在
 	basePath := global.Config.Upload.Path
 	_, err = os.ReadDir(basePath)
 	if err != nil {
@@ -35,17 +26,17 @@ func (this *ImageApi) ImageUploadView(c *gin.Context) {
 
 	var resList []image.FileUploadResponse
 
-	for _, file := range fileList {
-		serviceRes := service.ServiceGroupApp.ImageService.ImageUploadService(file)
-		// 如果前面上传失败
+	for _, fileHeader := range fileHeaderList {
+		serviceRes := service.ServiceGroupApp.ImageService.ImageUploadService(fileHeader)
+		// 如果某一张图片上传失败，继续上传下一张
 		if !serviceRes.IsSuccess {
 			resList = append(resList, serviceRes)
 			continue
 		}
-		// 不上传到七牛云，就保存到本地
+		// 不上传到七牛云，就保存到本地（有问题：这里是先存入数据库再上传，这样不好）
 		if !global.Config.QiNiu.Enable {
 			// 保存图片到本地
-			err = c.SaveUploadedFile(file, serviceRes.FileName)
+			err = c.SaveUploadedFile(fileHeader, serviceRes.FileName)
 			if err != nil {
 				global.Log.Error(err)
 				serviceRes.Msg = err.Error()
@@ -58,3 +49,4 @@ func (this *ImageApi) ImageUploadView(c *gin.Context) {
 	}
 	response.OkWithData(resList, c)
 }
+*/

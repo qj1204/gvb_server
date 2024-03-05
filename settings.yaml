@@ -5,17 +5,16 @@ mysql:
     db: gvb_db
     user: root
     password: "123456"
-    log_level: dev
-logger:
+logger_setting:
     level: info
     prefix: gvb
     director: log
     show_line: true
     log_in_console: true
 system:
-    host: 0.0.0.0
+    host: 127.0.0.1
     port: 8080
-    env: release
+    env: debug
 upload:
     size: 2
     path: static/uploads
@@ -23,16 +22,16 @@ site_info:
     created_at: "2023-12-18"
     bei_an: 陕ICP备2023003838号-1
     title: qj的个人博客
-    qq_image: https://qiniu.xiaoxinqj.top/static/my/img/QQ.jpg
+    qq_image: https://qiniu.xiaoxinqj.top/static/my/img/qq.jpg
     version: 1.0.0
     email: 1429030919@qq.com
-    wechat_image: https://qiniu.xiaoxinqj.top/static/my/img/WeChat.jpg
+    wechat_image: https://qiniu.xiaoxinqj.top/static/my/img/weixin.jpg
     name: 小新qj
     job: 后端开发工程师
     addr: 陕西西安
     slogan: 一切皆有可能
     slogan_en: Everything is possible
-    web: http://xiaoxinqj.top
+    web: http://blog.xiaoxinqj.top
     bilibili: https://space.bilibili.com/37807841
     github: https://github.com/qj1204
 email:
@@ -46,9 +45,9 @@ email:
 qq:
     app_id: xx
     key: xx
-    redirect: http://xx.xx.com/login?flag=qq
+    redirect: http://blog.xiaoxinqj.top/login?flag=qq
 qi_niu:
-    enable: false
+    enable: true
     access_key: lWi_q36PtaaEnIzcOKy-yFmK1VmbOIQY_ygsOiHF
     secret_key: LbjcW0Bdy7u11R8lIDJ72cq6kAUuWkYhaXTvNu2m
     bucket: xiaoxinqj
@@ -57,14 +56,15 @@ qi_niu:
     prefix: "gvb"
     size: 5
 jwt:
-    secret: qj
+    secret: qj1204
     expires: 48
-    issuer: "admin"
+    issuer: "qianjin"
 redis:
     ip: 127.0.0.1
     port: 6379
-    password: 123456
+    password:
     pool_size: 100
+    ttl: 5
 es:
     host: "http://127.0.0.1"
     port: 9200

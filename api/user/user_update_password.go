@@ -32,8 +32,8 @@ func (this *UserApi) UserUpdatePassword(c *gin.Context) {
 
 	// 判断旧密码与数据库中的密码是否一致
 	if pwd.CheckPwd(user.Password, cr.OldPwd) {
-		global.Log.Error("密码不一致")
-		response.FailWithMessage("密码不一致", c)
+		global.Log.Error("原密码错误")
+		response.FailWithMessage("原密码错误", c)
 		return
 	}
 	// 修改密码

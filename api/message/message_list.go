@@ -21,17 +21,16 @@ type Msg struct {
 	MessageCount     int       `json:"message_count"` // 消息条数
 }
 
-type MsgGroup map[uint]*Msg
-
 func (this *MessageApi) MessageListView(c *gin.Context) {
 	_claims, _ := c.Get("claims")
 	claims := _claims.(*jwt.CustomClaims)
 
-	var msgGroup = MsgGroup{}
+	var msgGroup = make(map[uint]*Msg)
 	var messageList []models.MessageModel
 	global.DB.Order("created_at asc").
 		Find(&messageList, "send_user_id = ? or receive_user_id = ?", claims.UserID, claims.UserID)
 
+	// 消息分组
 	for _, message := range messageList {
 		msg := Msg{
 			SendUserID:       message.SendUserID,
@@ -44,7 +43,7 @@ func (this *MessageApi) MessageListView(c *gin.Context) {
 			CreateAt:         message.CreatedAt,
 			MessageCount:     1,
 		}
-		idNum := message.SendUserID + message.ReceiveUserID
+		idNum := message.SendUserID + message.ReceiveUserID // 对当前用户来说，与其他用户的id之后保证唯一
 		val, ok := msgGroup[idNum]
 		if !ok {
 			// 不存在

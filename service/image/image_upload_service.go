@@ -1,20 +1,13 @@
 package image
 
 import (
-	"fmt"
 	"gvb_server/global"
 	"gvb_server/models"
 	"gvb_server/models/common/ctype"
-	"gvb_server/plugins/qiniu"
-	"gvb_server/utils"
-	"io"
-	"mime/multipart"
-	"path"
-	"strings"
 )
 
 var (
-	// WhiteImageList 图片上传的白名单，（只能上传在白名单中出现的文件后缀）
+	// WhiteImageList 图片上传的白名单
 	WhiteImageList = []string{"jpg", "jpeg", "png", "gif", "bmp", "webp", "ico", "svg", "tiff"}
 )
 
@@ -25,8 +18,8 @@ type FileUploadResponse struct {
 }
 
 // ImageUploadService 图片上传方法
-func (this *ImageService) ImageUploadService(file *multipart.FileHeader) (res FileUploadResponse) {
-	fileName := file.Filename
+/*func (this *ImageService) ImageUploadService(fileHeader *multipart.FileHeader) (res FileUploadResponse) {
+	fileName := fileHeader.Filename
 	basePath := global.Config.Upload.Path
 	filePath := path.Join(basePath, fileName)
 	res.FileName = filePath
@@ -39,14 +32,14 @@ func (this *ImageService) ImageUploadService(file *multipart.FileHeader) (res Fi
 	}
 
 	// 判断图片大小
-	size := float64(file.Size) / float64(1024*1024)
+	size := float64(fileHeader.Size) / float64(1024*1024)
 	if size >= float64(global.Config.Upload.Size) {
 		res.Msg = fmt.Sprintf("图片大小超过%dMB，当前大小为%.2fMB", global.Config.Upload.Size, size)
 		return
 	}
 
 	// 获取图片的md5值
-	fileObj, err := file.Open()
+	fileObj, err := fileHeader.Open()
 	if err != nil {
 		global.Log.Error(err)
 		res.Msg = err.Error()
@@ -88,4 +81,15 @@ func (this *ImageService) ImageUploadService(file *multipart.FileHeader) (res Fi
 		ImageType: fileType,
 	})
 	return
+}
+*/
+
+// CreateService 入库
+func (this *ImageService) CreateService(filePath, imageHash, fileName string, imageType ctype.ImageType) {
+	global.DB.Create(&models.BannerModel{
+		Path:      filePath,
+		Hash:      imageHash,
+		Name:      fileName,
+		ImageType: imageType,
+	})
 }

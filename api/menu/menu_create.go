@@ -62,15 +62,15 @@ func (this *MenuApi) MenuCreateView(c *gin.Context) {
 	}
 
 	var menuBannerList []models.MenuBannerModel
-	for _, imageSort := range cr.ImageSortList {
+	for _, image := range cr.ImageSortList {
 		// 这里需要判断imageSort.ImageID是否存在
 		menuBannerList = append(menuBannerList, models.MenuBannerModel{
 			MenuID:   menuModel.ID,
-			BannerID: imageSort.ImageID,
-			Sort:     imageSort.Sort,
+			BannerID: image.ImageID,
+			Sort:     image.Sort,
 		})
 	}
-	// 写入menu_banner关联表
+	// 写入menu_banner连接表
 	err = global.DB.Create(&menuBannerList).Error
 	if err != nil {
 		global.Log.Error(err)

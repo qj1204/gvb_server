@@ -13,7 +13,7 @@ type MessageRequest struct {
 	Content    string `json:"content" binding:"required"`
 }
 
-// MessageCreateView 发布消息
+// MessageCreateView 发送消息
 func (this *MessageApi) MessageCreateView(c *gin.Context) {
 	var cr MessageRequest
 	err := c.ShouldBindJSON(&cr)

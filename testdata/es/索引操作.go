@@ -45,7 +45,7 @@ func (this DemoModel) IndexExists() bool {
 func (this DemoModel) CreateIndex() error {
 	if this.IndexExists() {
 		// 索引已经存在，删除索引
-		return this.RemoveIndex()
+		this.RemoveIndex()
 	}
 	// 没有索引，创建索引
 	createIndex, err := client.

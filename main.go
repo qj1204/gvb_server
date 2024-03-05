@@ -21,9 +21,10 @@ func main() {
 	// 初始化数据库
 	global.DB = core.InitGorm()
 
-	// 命令行参数绑定
+	// 命令行参数绑定（在连接数据库之后，链接路由之前）
 	option := flag.Parse()
 	if flag.IsWebStop(option) {
+		// 如果是停止web服务，则执行相应的操作
 		flag.SwitchOption(option)
 		return
 	}

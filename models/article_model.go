@@ -2,7 +2,6 @@ package models
 
 import (
 	"context"
-	"github.com/sirupsen/logrus"
 	"gvb_server/global"
 	"gvb_server/models/common/ctype"
 )
@@ -13,9 +12,9 @@ type ArticleModel struct {
 	CreatedAt string `json:"created_at"` // 创建时间
 	UpdatedAt string `json:"updated_at"` // 更新时间
 
-	Title    string `json:"title"`    // 文章标题
-	Abstract string `json:"abstract"` // 文章简介
-	Content  string `json:"content"`  // 文章内容
+	Title    string `json:"title"`              // 文章标题
+	Abstract string `json:"abstract"`           // 文章简介
+	Content  string `json:"content,omit(list)"` // 文章内容（在list场景中，过滤掉content字段）
 
 	LookCount     int `json:"look_count"`     // 文章浏览量
 	CommentCount  int `json:"comment_count"`  // 文章评论量
@@ -24,8 +23,8 @@ type ArticleModel struct {
 
 	// --------用户 一对多 文章--------
 	UserID       uint   `json:"user_id"`        // 用户ID
-	UserNickName string `json:"user_nick_name"` // 文章作者
-	UserAvatar   string `json:"user_avatar"`    // 文章作者头像
+	UserNickName string `json:"user_nick_name"` // 文章作者（不是冗余，用空间换时间，节省查找的时间）
+	UserAvatar   string `json:"user_avatar"`    // 文章作者头像（不是冗余，用空间换时间，节省查找的时间）
 
 	Category string `json:"category"` // 文章分类
 	Source   string `json:"source"`   // 文章来源
@@ -33,7 +32,7 @@ type ArticleModel struct {
 
 	// --------文章 belongs to 封面--------
 	BannerID  uint   `json:"banner_id"`  // 文章封面ID
-	BannerUrl string `json:"banner_url"` // 文章封面
+	BannerUrl string `json:"banner_url"` // 文章封面（不是冗余，用空间换时间，节省查找的时间）
 
 	Tags ctype.Array `json:"tags"` // 文章标签
 }
@@ -117,7 +116,7 @@ func (this ArticleModel) IndexExists() bool {
 		IndexExists(this.Index()).
 		Do(context.Background())
 	if err != nil {
-		logrus.Error(err.Error())
+		global.Log.Error(err.Error())
 	}
 	return exists
 }
@@ -126,7 +125,7 @@ func (this ArticleModel) IndexExists() bool {
 func (this ArticleModel) CreateIndex() error {
 	if this.IndexExists() {
 		// 索引已经存在，删除索引
-		return this.RemoveIndex()
+		this.RemoveIndex()
 	}
 	// 没有索引，创建索引
 	createIndex, err := global.ESClient.
@@ -135,47 +134,46 @@ func (this ArticleModel) CreateIndex() error {
 		Do(context.Background())
 	if err != nil {
 
-		logrus.Errorf("创建索引失败, %s", err.Error())
+		global.Log.Errorf("创建索引失败, %s", err.Error())
 		return err
 	}
 	if !createIndex.Acknowledged {
-		logrus.Errorf("创建索引失败, %s", err.Error())
+		global.Log.Errorf("创建索引失败, %s", err.Error())
 		return err
 	}
-	logrus.Infof("%s 创建索引成功", this.Index())
+	global.Log.Infof("%s 创建索引成功", this.Index())
 	return nil
 }
 
 // RemoveIndex 删除索引
 func (this ArticleModel) RemoveIndex() error {
-	logrus.Info("索引存在，删除索引")
+	global.Log.Info("索引存在，删除索引")
 	indexDelete, err := global.ESClient.
 		DeleteIndex(this.Index()).
 		Do(context.Background())
 	if err != nil {
-		logrus.Errorf("删除索引失败, %s", err.Error())
+		global.Log.Errorf("删除索引失败, %s", err.Error())
 		return err
 	}
 	if !indexDelete.Acknowledged {
-		logrus.Errorf("删除索引失败, %s", err.Error())
+		global.Log.Errorf("删除索引失败, %s", err.Error())
 		return err
 	}
-	logrus.Info("删除索引成功")
+	global.Log.Info("删除索引成功")
 	return nil
 }
 
-// Create 创建文章
-func (this ArticleModel) Create() (err error) {
-	indexResponse, err := global.ESClient.
-		Index().
+// InsertArticle 添加文章
+func (this ArticleModel) InsertArticle() (err error) {
+	indexResponse, err := global.ESClient.Index().
 		Index(this.Index()).
 		BodyJson(this).
 		Do(context.Background())
 	if err != nil {
-		logrus.Errorf("添加索引失败，%s", err.Error())
+		global.Log.Errorf("添加文章失败，%s", err.Error())
 		return err
 	}
-	logrus.Infof("添加索引成功，%#v", indexResponse)
+	global.Log.Infof("添加文章成功，%#v", indexResponse)
 	this.ID = indexResponse.Id
 	return nil
 }

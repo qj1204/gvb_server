@@ -14,7 +14,7 @@ func (this *SystemApi) SystemInfoView(c *gin.Context) {
 	var cr SystemUri
 	err := c.ShouldBindUri(&cr)
 	if err != nil {
-		response.FailWithCode(response.ArgumentError, c)
+		response.FailWithCode(gin.ErrorTypeBind, c)
 		return
 	}
 	switch cr.Name {

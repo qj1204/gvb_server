@@ -5,9 +5,9 @@ type CommentModel struct {
 	MODEL
 	SubComments []*CommentModel `gorm:"foreignKey:ParentCommentID" json:"sub_comments"` // 子评论列表
 
-	// 自关联 --------子评论 belongs to 父评论--------
-	ParentCommentID    *uint         `gorm:"comment:'父评论ID'" json:"parent_comment_id"`        // 父评论ID
-	ParentCommentModel *CommentModel `gorm:"foreignKey:ParentCommentID" json:"comment_model"` // 父评论
+	// --------子评论 belongs to 父评论--------
+	ParentCommentID    *uint         `gorm:"comment:'父评论ID'" json:"parent_comment_id"`        // 父评论ID（可以为空）
+	ParentCommentModel *CommentModel `gorm:"foreignKey:ParentCommentID" json:"comment_model"` // 父评论（可以为空）
 
 	Content      string `gorm:"size:256;comment:'评论内容'" json:"content"`              // 评论内容
 	DiggCount    int    `gorm:"size:8;default:0;comment:'评论点赞量'" json:"digg_count"`  // 评论点赞量

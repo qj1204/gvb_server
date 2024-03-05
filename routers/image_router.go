@@ -8,10 +8,10 @@ import (
 type ImageRouter struct{}
 
 func (this *ImageRouter) InitImageRouter(router *gin.RouterGroup) {
-	imageApiGroup := api.ApiGroupApp.ImageApiGroup
-	router.POST("/image", imageApiGroup.ImageUploadView)
-	router.GET("/image", imageApiGroup.ImageListView)
-	router.DELETE("/image", imageApiGroup.ImageRemoveView)
-	router.PUT("/image", imageApiGroup.ImageUpdateView)
-	router.GET("/image_name", imageApiGroup.ImageNameListView)
+	apiGroup := api.ApiGroupApp.ImageApiGroup
+	router.POST("/image", apiGroup.ImageUploadViewMy)
+	router.GET("/image", apiGroup.ImageListView)
+	router.DELETE("/image", apiGroup.ImageRemoveView)
+	router.PUT("/image", apiGroup.ImageUpdateView)
+	router.GET("/image_name", apiGroup.ImageNameListView)
 }

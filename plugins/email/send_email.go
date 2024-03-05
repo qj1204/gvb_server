@@ -18,7 +18,8 @@ type Api struct {
 }
 
 func (a Api) Send(name, body string) error {
-	return send(name, string(a.Subject), body)
+	e := global.Config.Email
+	return sendEmail(e.User, e.Password, e.Host, e.Port, name, e.DefaultFromEmail, string(a.Subject), body)
 }
 
 func NewCode() Api {
@@ -31,11 +32,6 @@ func NewNote() Api {
 
 func NewAlarm() Api {
 	return Api{Subject: Alarm}
-}
-
-func send(name, subject, body string) error {
-	e := global.Config.Email
-	return sendEmail(e.User, e.Password, e.Host, e.Port, name, e.DefaultFromEmail, subject, body)
 }
 
 func sendEmail(userName, authCode, host string, port int, mailTo, sendName, subject, body string) error {

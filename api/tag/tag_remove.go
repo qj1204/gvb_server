@@ -12,7 +12,7 @@ func (this *TagApi) TagRemoveView(c *gin.Context) {
 	var cr models.RemoveRequest
 	err := c.ShouldBindJSON(&cr)
 	if err != nil {
-		response.FailWithCode(response.ArgumentError, c)
+		response.FailWithCode(gin.ErrorTypeBind, c)
 		return
 	}
 
@@ -22,7 +22,7 @@ func (this *TagApi) TagRemoveView(c *gin.Context) {
 		response.FailWithMessage("标签不存在", c)
 		return
 	}
-	// 如果这个标签下有文章，该怎么办？
+	// TODO:如果这个标签下有文章，该怎么办？
 	global.DB.Delete(&tagList)
 	response.OkWithMessage(fmt.Sprintf("共删除%d条标签", count), c)
 }

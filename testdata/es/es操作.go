@@ -42,19 +42,22 @@ func (this DemoModel) Index() string {
 	return "demo_index"
 }
 
-// Create 创建
-func Create(data *DemoModel) (err error) {
-	indexResponse, err := client.Index().Index(data.Index()).BodyJson(data).Do(context.Background())
+// InsertData 添加数据
+func InsertData(data *DemoModel) (err error) {
+	indexResponse, err := client.Index().
+		Index(data.Index()). // 选中索引
+		BodyJson(data).
+		Do(context.Background())
 	if err != nil {
-		logrus.Errorf("添加索引失败，%s", err.Error())
+		logrus.Errorf("添加数据失败，%s", err.Error())
 		return err
 	}
-	logrus.Infof("添加索引成功，%#v", indexResponse)
+	logrus.Infof("添加数据成功，%#v", indexResponse)
 	data.ID = indexResponse.Id
 	return nil
 }
 
-// FindList 查询索引
+// FindList 查询数据
 func FindList(key string, page int, limit int) (demoList []DemoModel, count int) {
 	boolSearch := elastic.NewBoolQuery()
 	from := page
@@ -67,7 +70,9 @@ func FindList(key string, page int, limit int) (demoList []DemoModel, count int)
 	if from == 0 { // 默认第一页
 		from = 1
 	}
-	res, err := client.Search(DemoModel{}.Index()).Query(boolSearch).From((from - 1) * limit).Size(limit).
+	res, err := client.Search(DemoModel{}.Index()).
+		Query(boolSearch).
+		From((from - 1) * limit).Size(limit).
 		Do(context.Background())
 	if err != nil {
 		logrus.Errorf("查询失败, %s", err.Error())
@@ -93,8 +98,8 @@ func FindList(key string, page int, limit int) (demoList []DemoModel, count int)
 	return demoList, count
 }
 
-// FindSouceList 查询索引
-func FindSouceList(key string, page int, limit int) {
+// FindSourceList 指定字段查询数据
+func FindSourceList(key string, page int, limit int) {
 	boolSearch := elastic.NewBoolQuery()
 	from := page
 	if key != "" {
@@ -164,23 +169,23 @@ func Remove(idList []string) (count int, err error) {
 	}
 	res, err := bulkService.Do(context.Background())
 	if err != nil {
-		logrus.Errorf("删除索引失败，%s", err.Error())
+		logrus.Errorf("删除数据失败，%s", err.Error())
 		return 0, err
 	}
-	logrus.Info("删除索引成功")
+	logrus.Info("删除数据成功")
 	return len(res.Succeeded()), nil
 }
 
 func main() {
 	//DemoModel{}.CreateIndex()
 
-	//Create(&DemoModel{
+	//InsertData(&DemoModel{
 	//	Title:     "go基础",
 	//	UserID:    1,
 	//	CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
 	//})
 
-	//Create(&DemoModel{
+	//InsertData(&DemoModel{
 	//	Title:     "go进阶",
 	//	UserID:    2,
 	//	CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
@@ -189,9 +194,10 @@ func main() {
 	//list, count := FindList("go", 1, 10)
 	//fmt.Println(list, count)
 
-	// FindSouceList("基础", 1, 10)	// 搜索失效了
-	//Update("cT5HxI0BDjsaIRYC8Prk", &DemoModel{Title: "go基础学习"})
+	//FindSourceList("基础", 1, 10) // 搜索失效了
 
-	count, err := Remove([]string{"cj5TxI0BDjsaIRYCn_o6"})
+	//Update("VhL_B44Beq8OFDNus4So", &DemoModel{Title: "go基础学习"})
+
+	count, err := Remove([]string{"VhL_B44Beq8OFDNus4So"})
 	fmt.Println(count, err)
 }

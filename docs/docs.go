@@ -28,21 +28,25 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "关键字",
                         "name": "key",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "description": "每页显示条数",
                         "name": "limit",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "description": "页码",
                         "name": "page_num",
                         "in": "query"
                     },
                     {
                         "type": "string",
+                        "description": "排序",
                         "name": "sort",
                         "in": "query"
                     }
@@ -59,7 +63,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/response.ListResponse-models_AdvertModel"
+                                            "$ref": "#/definitions/response.ListResponse"
                                         }
                                     }
                                 }
@@ -108,7 +112,7 @@ const docTemplate = `{
                 "summary": "删除广告",
                 "parameters": [
                     {
-                        "description": "查询参数",
+                        "description": "广告id列表",
                         "name": "data",
                         "in": "body",
                         "required": true,
@@ -195,21 +199,25 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "关键字",
                         "name": "key",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "description": "每页显示条数",
                         "name": "limit",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "description": "页码",
                         "name": "page_num",
                         "in": "query"
                     },
                     {
                         "type": "string",
+                        "description": "排序",
                         "name": "sort",
                         "in": "query"
                     }
@@ -226,7 +234,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/response.ListResponse-models_BannerModel"
+                                            "$ref": "#/definitions/response.ListResponse"
                                         }
                                     }
                                 }
@@ -236,7 +244,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/image_names": {
+        "/api/image_name": {
             "get": {
                 "description": "图片名称列表",
                 "produces": [
@@ -300,21 +308,6 @@ const docTemplate = `{
                 }
             }
         },
-        "ctype.ImageType": {
-            "type": "integer",
-            "enum": [
-                1,
-                2
-            ],
-            "x-enum-comments": {
-                "Local": "本地",
-                "QiNiu": "七牛云"
-            },
-            "x-enum-varnames": [
-                "Local",
-                "QiNiu"
-            ]
-        },
         "image.ImageResponse": {
             "type": "object",
             "properties": {
@@ -325,76 +318,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "path": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.AdvertModel": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "href": {
-                    "description": "广告链接",
-                    "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "image": {
-                    "description": "广告图片",
-                    "type": "string"
-                },
-                "is_show": {
-                    "description": "是否显示",
-                    "type": "boolean"
-                },
-                "title": {
-                    "description": "广告标题",
-                    "type": "string"
-                },
-                "updated_at": {
-                    "description": "更新时间",
-                    "type": "string"
-                }
-            }
-        },
-        "models.BannerModel": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "hash": {
-                    "description": "图片哈希，用于判断图片是否重复",
-                    "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "image_type": {
-                    "description": "ArticleModel []ArticleModel ` + "`" + `gorm:\"foreignKey:CoverID\" json:\"-\"` + "`" + ` // 文章",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/ctype.ImageType"
-                        }
-                    ]
-                },
-                "name": {
-                    "description": "图片名称",
-                    "type": "string"
-                },
-                "path": {
-                    "description": "图片路径",
-                    "type": "string"
-                },
-                "updated_at": {
-                    "description": "更新时间",
                     "type": "string"
                 }
             }
@@ -410,26 +333,13 @@ const docTemplate = `{
                 }
             }
         },
-        "response.ListResponse-models_AdvertModel": {
+        "response.ListResponse": {
             "type": "object",
             "properties": {
                 "count": {
                     "type": "integer"
                 },
-                "list": {
-                    "$ref": "#/definitions/models.AdvertModel"
-                }
-            }
-        },
-        "response.ListResponse-models_BannerModel": {
-            "type": "object",
-            "properties": {
-                "count": {
-                    "type": "integer"
-                },
-                "list": {
-                    "$ref": "#/definitions/models.BannerModel"
-                }
+                "list": {}
             }
         },
         "response.Response": {

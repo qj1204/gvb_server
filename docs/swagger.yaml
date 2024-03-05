@@ -20,17 +20,6 @@ definitions:
     - is_show
     - title
     type: object
-  ctype.ImageType:
-    enum:
-    - 1
-    - 2
-    type: integer
-    x-enum-comments:
-      Local: 本地
-      QiNiu: 七牛云
-    x-enum-varnames:
-    - Local
-    - QiNiu
   image.ImageResponse:
     properties:
       id:
@@ -40,56 +29,6 @@ definitions:
       path:
         type: string
     type: object
-  models.AdvertModel:
-    properties:
-      created_at:
-        description: 创建时间
-        type: string
-      href:
-        description: 广告链接
-        type: string
-      id:
-        description: 主键ID
-        type: integer
-      image:
-        description: 广告图片
-        type: string
-      is_show:
-        description: 是否显示
-        type: boolean
-      title:
-        description: 广告标题
-        type: string
-      updated_at:
-        description: 更新时间
-        type: string
-    type: object
-  models.BannerModel:
-    properties:
-      created_at:
-        description: 创建时间
-        type: string
-      hash:
-        description: 图片哈希，用于判断图片是否重复
-        type: string
-      id:
-        description: 主键ID
-        type: integer
-      image_type:
-        allOf:
-        - $ref: '#/definitions/ctype.ImageType'
-        description: ArticleModel []ArticleModel `gorm:"foreignKey:CoverID" json:"-"`
-          // 文章
-      name:
-        description: 图片名称
-        type: string
-      path:
-        description: 图片路径
-        type: string
-      updated_at:
-        description: 更新时间
-        type: string
-    type: object
   models.RemoveRequest:
     properties:
       id_list:
@@ -97,19 +36,11 @@ definitions:
           type: integer
         type: array
     type: object
-  response.ListResponse-models_AdvertModel:
+  response.ListResponse:
     properties:
       count:
         type: integer
-      list:
-        $ref: '#/definitions/models.AdvertModel'
-    type: object
-  response.ListResponse-models_BannerModel:
-    properties:
-      count:
-        type: integer
-      list:
-        $ref: '#/definitions/models.BannerModel'
+      list: {}
     type: object
   response.Response:
     properties:
@@ -130,7 +61,7 @@ paths:
     delete:
       description: 删除广告
       parameters:
-      - description: 查询参数
+      - description: 广告id列表
         in: body
         name: data
         required: true
@@ -154,16 +85,20 @@ paths:
     get:
       description: 广告列表
       parameters:
-      - in: query
+      - description: 关键字
+        in: query
         name: key
         type: string
-      - in: query
+      - description: 每页显示条数
+        in: query
         name: limit
         type: integer
-      - in: query
+      - description: 页码
+        in: query
         name: page_num
         type: integer
-      - in: query
+      - description: 排序
+        in: query
         name: sort
         type: string
       produces:
@@ -176,7 +111,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/response.ListResponse-models_AdvertModel'
+                  $ref: '#/definitions/response.ListResponse'
               type: object
       summary: 广告列表
       tags:
@@ -229,16 +164,20 @@ paths:
     get:
       description: 图片列表
       parameters:
-      - in: query
+      - description: 关键字
+        in: query
         name: key
         type: string
-      - in: query
+      - description: 每页显示条数
+        in: query
         name: limit
         type: integer
-      - in: query
+      - description: 页码
+        in: query
         name: page_num
         type: integer
-      - in: query
+      - description: 排序
+        in: query
         name: sort
         type: string
       produces:
@@ -251,12 +190,12 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/response.ListResponse-models_BannerModel'
+                  $ref: '#/definitions/response.ListResponse'
               type: object
       summary: 图片列表
       tags:
       - 图片管理
-  /api/image_names:
+  /api/image_name:
     get:
       description: 图片名称列表
       produces:

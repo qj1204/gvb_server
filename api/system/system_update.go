@@ -12,7 +12,7 @@ func (this *SystemApi) SystemInfoUpdateView(c *gin.Context) {
 	var cr SystemUri
 	err := c.ShouldBindUri(&cr)
 	if err != nil {
-		response.FailWithCode(response.ArgumentError, c)
+		response.FailWithCode(gin.ErrorTypeBind, c)
 		return
 	}
 	switch cr.Name {
@@ -20,7 +20,7 @@ func (this *SystemApi) SystemInfoUpdateView(c *gin.Context) {
 		var info config.SiteInfo
 		err = c.ShouldBindJSON(&info)
 		if err != nil {
-			response.FailWithCode(response.ArgumentError, c)
+			response.FailWithCode(gin.ErrorTypeBind, c)
 			return
 		}
 		global.Config.SiteInfo = info
@@ -28,7 +28,7 @@ func (this *SystemApi) SystemInfoUpdateView(c *gin.Context) {
 		var info config.Jwt
 		err = c.ShouldBindJSON(&info)
 		if err != nil {
-			response.FailWithCode(response.ArgumentError, c)
+			response.FailWithCode(gin.ErrorTypeBind, c)
 			return
 		}
 		global.Config.Jwt = info
@@ -36,7 +36,7 @@ func (this *SystemApi) SystemInfoUpdateView(c *gin.Context) {
 		var info config.QQ
 		err = c.ShouldBindJSON(&info)
 		if err != nil {
-			response.FailWithCode(response.ArgumentError, c)
+			response.FailWithCode(gin.ErrorTypeBind, c)
 			return
 		}
 		global.Config.QQ = info
@@ -44,7 +44,7 @@ func (this *SystemApi) SystemInfoUpdateView(c *gin.Context) {
 		var info config.QiNiu
 		err = c.ShouldBindJSON(&info)
 		if err != nil {
-			response.FailWithCode(response.ArgumentError, c)
+			response.FailWithCode(gin.ErrorTypeBind, c)
 			return
 		}
 		global.Config.QiNiu = info
@@ -52,7 +52,7 @@ func (this *SystemApi) SystemInfoUpdateView(c *gin.Context) {
 		var info config.Email
 		err = c.ShouldBindJSON(&info)
 		if err != nil {
-			response.FailWithCode(response.ArgumentError, c)
+			response.FailWithCode(gin.ErrorTypeBind, c)
 			return
 		}
 		global.Config.Email = info
@@ -60,7 +60,7 @@ func (this *SystemApi) SystemInfoUpdateView(c *gin.Context) {
 		var info config.Redis
 		err = c.ShouldBindJSON(&info)
 		if err != nil {
-			response.FailWithCode(response.ArgumentError, c)
+			response.FailWithCode(gin.ErrorTypeBind, c)
 			return
 		}
 		global.Config.Redis = info
@@ -68,7 +68,7 @@ func (this *SystemApi) SystemInfoUpdateView(c *gin.Context) {
 		var info config.ES
 		err = c.ShouldBindJSON(&info)
 		if err != nil {
-			response.FailWithCode(response.ArgumentError, c)
+			response.FailWithCode(gin.ErrorTypeBind, c)
 			return
 		}
 		global.Config.ES = info
@@ -79,8 +79,10 @@ func (this *SystemApi) SystemInfoUpdateView(c *gin.Context) {
 
 	err = core.SetYaml()
 	if err != nil {
-		response.FailWithMessage(err.Error(), c)
+		global.Log.Error(err)
+		response.FailWithMessage("配置文件修改失败", c)
 		return
 	}
+	global.Log.Info("配置文件修改成功")
 	response.OkWithMessage("成功", c)
 }

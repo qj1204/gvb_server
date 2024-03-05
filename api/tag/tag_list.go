@@ -11,7 +11,7 @@ func (this *TagApi) TagListView(c *gin.Context) {
 	var cr models.Page
 	err := c.ShouldBindQuery(&cr)
 	if err != nil {
-		response.FailWithCode(response.ArgumentError, c)
+		response.FailWithCode(gin.ErrorTypeBind, c)
 		return
 	}
 

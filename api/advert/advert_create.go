@@ -22,7 +22,7 @@ type AdvertRequest struct {
 // @Router /api/advert [post]
 // @Produce json
 // @Success 200 {object} response.Response{}
-func (*AdvertApi) AdvertCreateView(c *gin.Context) {
+func (this *AdvertApi) AdvertCreateView(c *gin.Context) {
 	var cr AdvertRequest
 	err := c.ShouldBindJSON(&cr)
 	if err != nil {

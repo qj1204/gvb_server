@@ -28,6 +28,9 @@ func (this *MenuApi) MenuDetailView(c *gin.Context) {
 	// 解决nil值的问题
 	var banners = make([]Banner, 0)
 	for _, menuBanner := range menuBanners {
+		if menuModel.ID != menuBanner.MenuID {
+			continue
+		}
 		banners = append(banners, Banner{
 			ID:   menuBanner.BannerID,
 			Path: menuBanner.BannerModel.Path,

@@ -42,10 +42,10 @@ func (this *UserApi) EmailLoginView(c *gin.Context) {
 
 	// 登录成功，生成token
 	token, err := jwt.GenerateToken(jwt.JwtPayLoad{
+		UserID: userModel.ID,
 		//Username: userModel.UserName,
 		NickName: userModel.NickName,
 		Role:     int(userModel.Role),
-		UserID:   userModel.ID,
 	})
 	if err != nil {
 		global.Log.Error("生成token失败")

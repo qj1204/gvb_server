@@ -2,6 +2,8 @@ package ctype
 
 import "encoding/json"
 
+// 参考gorm代码的10_枚举.go
+
 type ImageType int
 
 const (

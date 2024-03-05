@@ -41,16 +41,12 @@ func getCfg(q config.QiNiu) storage.Config {
 // UploadImage 上传图片
 func UploadImage(data []byte, imageName string, prefix string) (filePath string, err error) {
 	q := global.Config.QiNiu
-	if !q.Enable {
-		return "", errors.New("未开启七牛云上传")
-	}
-
 	if q.AccessKey == "" || q.SecretKey == "" {
 		return "", errors.New("请配置七牛云的AccessKey和SecretKey")
 	}
-	if float64(len(data))/float64(1024*1024) > q.Size {
-		return "", errors.New("文件大小超过限制")
-	}
+	//if float64(len(data))/float64(1024*1024) > float64(q.Size) {
+	//	return "", errors.New("文件大小超过限制")
+	//}
 	upToken := getToken(q)
 	cfg := getCfg(q)
 	formUploader := storage.NewFormUploader(&cfg)

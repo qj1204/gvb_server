@@ -13,23 +13,26 @@ func (this *MenuApi) MenuRemoveView(c *gin.Context) {
 	var cr models.RemoveRequest
 	err := c.ShouldBindJSON(&cr)
 	if err != nil {
-		response.FailWithCode(response.ArgumentError, c)
+		response.FailWithCode(gin.ErrorTypeBind, c)
 		return
 	}
 
 	var menuList []models.MenuModel
 	count := global.DB.Find(&menuList, cr.IDList).RowsAffected
 	if count == 0 {
-		response.FailWithMessage("图片不存在", c)
+		response.FailWithMessage("菜单不存在", c)
 		return
 	}
 
+	// 事务
 	err = global.DB.Transaction(func(tx *gorm.DB) error {
+		// 先删连接表
 		err = global.DB.Model(&menuList).Association("Banners").Clear()
 		if err != nil {
 			global.Log.Error(err)
 			return err
 		}
+		// 再删menu
 		err = global.DB.Delete(&menuList).Error
 		if err != nil {
 			global.Log.Error(err)

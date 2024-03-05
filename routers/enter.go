@@ -26,14 +26,15 @@ func InitRouter() *gin.Engine {
 	router.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))
 
 	apiRouterGroup := router.Group("/api")
-	// 系统配置api
-	RouterGroupApp.SystemRouterGroup.InitSystemRouter(apiRouterGroup)
-	RouterGroupApp.ImageRouterGroup.InitImageRouter(apiRouterGroup)
-	RouterGroupApp.AdvertRouterGroup.InitAdvertRouter(apiRouterGroup)
-	RouterGroupApp.MenuRouterGroup.InitMenuRouter(apiRouterGroup)
-	RouterGroupApp.UserRouterGroup.InitUserRouter(apiRouterGroup)
-	RouterGroupApp.TagRouterGroup.InitTagRouter(apiRouterGroup)
-	RouterGroupApp.MessageRouter.InitMessageRouter(apiRouterGroup)
-	RouterGroupApp.ArticleRouter.InitArticleRouter(apiRouterGroup)
+	{
+		RouterGroupApp.SystemRouterGroup.InitSystemRouter(apiRouterGroup)
+		RouterGroupApp.ImageRouterGroup.InitImageRouter(apiRouterGroup)
+		RouterGroupApp.AdvertRouterGroup.InitAdvertRouter(apiRouterGroup)
+		RouterGroupApp.MenuRouterGroup.InitMenuRouter(apiRouterGroup)
+		RouterGroupApp.UserRouterGroup.InitUserRouter(apiRouterGroup)
+		RouterGroupApp.TagRouterGroup.InitTagRouter(apiRouterGroup)
+		RouterGroupApp.MessageRouter.InitMessageRouter(apiRouterGroup)
+		RouterGroupApp.ArticleRouter.InitArticleRouter(apiRouterGroup)
+	}
 	return router
 }
