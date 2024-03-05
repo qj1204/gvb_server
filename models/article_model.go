@@ -2,6 +2,7 @@ package models
 
 import (
 	"context"
+	"github.com/olivere/elastic/v7"
 	"gvb_server/global"
 	"gvb_server/models/common/ctype"
 )
@@ -13,6 +14,7 @@ type ArticleModel struct {
 	UpdatedAt string `json:"updated_at"` // 更新时间
 
 	Title    string `json:"title"`              // 文章标题
+	Keyword  string `json:"keyword,omit(list)"` // 文章关键字（在list场景中，过滤掉keyword字段）
 	Abstract string `json:"abstract"`           // 文章简介
 	Content  string `json:"content,omit(list)"` // 文章内容（在list场景中，过滤掉content字段）
 
@@ -41,7 +43,7 @@ func (this ArticleModel) Index() string {
 	return "article_index"
 }
 
-func (this ArticleModel) Mapping() string {
+func (this ArticleModel) Mapping() string { // keyword类型不会被分词（用于精确匹配），text类型会被分词
 	return `{
 	"settings": {
 		"index": {
@@ -52,6 +54,9 @@ func (this ArticleModel) Mapping() string {
 		"properties": {
 			"title": {
 				"type":	"text"
+			},
+			"keyword": {
+				"type":	"keyword"
 			},
 			"abstract": {
 				"type":	"text"
@@ -164,7 +169,7 @@ func (this ArticleModel) RemoveIndex() error {
 }
 
 // InsertArticle 添加文章
-func (this ArticleModel) InsertArticle() (err error) {
+func (this ArticleModel) InsertArticle() error {
 	indexResponse, err := global.ESClient.Index().
 		Index(this.Index()).
 		BodyJson(this).
@@ -176,4 +181,18 @@ func (this ArticleModel) InsertArticle() (err error) {
 	global.Log.Infof("添加文章成功，%#v", indexResponse)
 	this.ID = indexResponse.Id
 	return nil
+}
+
+// ArticleExists 文章是否存在
+func (this ArticleModel) ArticleExists() bool {
+	res, err := global.ESClient.
+		Search(this.Index()).
+		Query(elastic.NewTermQuery("keyword", this.Title)). // 精确匹配
+		Size(1).
+		Do(context.Background())
+	if err != nil {
+		global.Log.Error(err)
+		return false
+	}
+	return res.TotalHits() > 0
 }
