@@ -61,14 +61,14 @@ func (this ArticleModel) Mapping() string { // keyword类型不会被分词（�
 			"digg_count":{"type": "integer"},
 			"collects_count":{"type": "integer"},
 			"user_id":{"type": "integer"},
-			"user_nick_name":{"type": "text"},
-			"user_avatar":{"type": "text"},
-			"category":{"type": "text"},
-			"source":{"type": "text"},
-			"link":{"type":	"text"},
+			"user_nick_name":{"type": "keyword"},
+			"user_avatar":{"type": "keyword"},
+			"category":{"type": "keyword"},
+			"source":{"type": "keyword"},
+			"link":{"type":	"keyword"},
 			"banner_id":{"type": "integer"},
-			"banner_url":{"type": "text"},
-			"tags":{"type": "text"},
+			"banner_url":{"type": "keyword"},
+			"tags":{"type": "keyword"},
 			"created_at": {
 				"type": "date",
 				"null_value": "null",
@@ -107,7 +107,6 @@ func (this ArticleModel) CreateIndex() error {
 		BodyString(this.Mapping()).
 		Do(context.Background())
 	if err != nil {
-
 		global.Log.Errorf("创建索引失败, %s", err.Error())
 		return err
 	}
@@ -139,7 +138,8 @@ func (this ArticleModel) RemoveIndex() error {
 
 // InsertArticle 添加文章
 func (this ArticleModel) InsertArticle() error {
-	indexResponse, err := global.ESClient.Index().
+	indexResponse, err := global.ESClient.
+		Index().
 		Index(this.Index()).
 		BodyJson(this).
 		Do(context.Background())

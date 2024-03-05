@@ -73,7 +73,6 @@ func CommonDetailByKeyword(key string) (article models.ArticleModel, err error) 
 	res, err := global.ESClient.Search().
 		Index(models.ArticleModel{}.Index()).
 		Query(elastic.NewTermQuery("keyword", key)).
-		Size(1).
 		Do(context.Background())
 	if err != nil {
 		global.Log.Errorf("查询失败，%s", err.Error())

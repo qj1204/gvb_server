@@ -42,7 +42,6 @@ func (this *ArticleApi) ArticleCalendarView(c *gin.Context) {
 		Search(models.ArticleModel{}.Index()).
 		Query(query).
 		Aggregation("article_calendar", agg).
-		Size(0).
 		Do(context.Background())
 	if err != nil {
 		global.Log.Error(err)
