@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/go-redis/redis/v8"
-	"github.com/sirupsen/logrus"
+	"gvb_server/global"
 	"time"
 )
 
@@ -21,7 +21,7 @@ func init() {
 	defer cancel()
 	_, err := rdb.Ping(context.Background()).Result()
 	if err != nil {
-		logrus.Error(err)
+		global.Log.Error(err)
 		return
 	}
 }

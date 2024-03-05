@@ -52,54 +52,23 @@ func (this ArticleModel) Mapping() string { // keyword类型不会被分词（�
 	},
 	"mappings": {
 		"properties": {
-			"title": {
-				"type":	"text"
-			},
-			"keyword": {
-				"type":	"keyword"
-			},
-			"abstract": {
-				"type":	"text"
-			},
-			"content": {
-				"type":	"text"
-			},
-			"look_count": {
-				"type": "integer"
-			},
-			"comment_count": {
-				"type": "integer"
-			},
-			"digg_count": {
-				"type": "integer"
-			},
-			"collects_count": {
-				"type": "integer"
-			},
-			"user_id": {
-				"type": "integer"
-			},
-			"user_nick_name": {
-				"type":	"text"
-			},
-			"user_avatar": {
-				"type":	"text"
-			},
-			"category": {
-				"type":	"text"
-			},
-			"source": {
-				"type":	"text"
-			},
-			"link": {
-				"type":	"text"
-			},
-			"banner_id": {
-				"type": "integer"
-			},
-			"banner_url": {
-				"type":	"text"
-			},
+			"title":{"type": "text"},
+			"keyword":{"type": "keyword"},
+			"abstract":{"type": "text"},
+			"content":{"type": "text"},
+			"look_count":{"type": "integer"},
+			"comment_count":{"type": "integer"},
+			"digg_count":{"type": "integer"},
+			"collects_count":{"type": "integer"},
+			"user_id":{"type": "integer"},
+			"user_nick_name":{"type": "text"},
+			"user_avatar":{"type": "text"},
+			"category":{"type": "text"},
+			"source":{"type": "text"},
+			"link":{"type":	"text"},
+			"banner_id":{"type": "integer"},
+			"banner_url":{"type": "text"},
+			"tags":{"type": "text"},
 			"created_at": {
 				"type": "date",
 				"null_value": "null",

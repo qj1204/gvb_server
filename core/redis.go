@@ -3,7 +3,6 @@ package core
 import (
 	"context"
 	"github.com/go-redis/redis/v8"
-	"github.com/sirupsen/logrus"
 	"gvb_server/global"
 	"time"
 )
@@ -24,7 +23,7 @@ func ConnectRedisDB(db int) *redis.Client {
 	defer cancel()
 	_, err := rdb.Ping(context.Background()).Result()
 	if err != nil {
-		logrus.Errorf("redis连接失败 %s", redisConf.Addr())
+		global.Log.Errorf("redis连接失败 %s", redisConf.Addr())
 		return nil
 	}
 	return rdb

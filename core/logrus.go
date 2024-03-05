@@ -18,9 +18,9 @@ const (
 	gray   = 37
 )
 
-type LogFormatter struct{}
+type MyLogFormatter struct{}
 
-func (this *LogFormatter) Format(entry *logrus.Entry) ([]byte, error) {
+func (this *MyLogFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 	var levelColor int
 	switch entry.Level {
 	case logrus.DebugLevel, logrus.TraceLevel:
@@ -58,7 +58,7 @@ func InitLogger() *logrus.Logger {
 	myLog := logrus.New()                                       // 新建一个日志对象
 	myLog.SetOutput(os.Stdout)                                  // 设置日志输出到标准输出
 	myLog.SetReportCaller(global.Config.LoggerSetting.ShowLine) // 开启返回函数名和行号
-	myLog.SetFormatter(&LogFormatter{})                         // 设置自己定义的Formatter
+	myLog.SetFormatter(&MyLogFormatter{})                       // 设置自己定义的Formatter
 	level, err := logrus.ParseLevel(global.Config.LoggerSetting.Level)
 	if err != nil {
 		level = logrus.InfoLevel
@@ -72,7 +72,7 @@ func InitLogger() *logrus.Logger {
 func InitDefaultLogger() {
 	logrus.SetOutput(os.Stdout)
 	logrus.SetReportCaller(global.Config.LoggerSetting.ShowLine)
-	logrus.SetFormatter(&LogFormatter{})
+	logrus.SetFormatter(&MyLogFormatter{})
 	level, err := logrus.ParseLevel(global.Config.LoggerSetting.Level)
 	if err != nil {
 		level = logrus.InfoLevel
@@ -125,5 +125,5 @@ func InitFileLogger(myLog *logrus.Logger) {
 
 	fileHook := FileDateHook{file, global.Config.LoggerSetting.Director, fileDate, global.Config.LoggerSetting.Prefix}
 	myLog.AddHook(&fileHook)
-	myLog.SetFormatter(&LogFormatter{})
+	myLog.SetFormatter(&MyLogFormatter{})
 }
