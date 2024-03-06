@@ -16,4 +16,5 @@ func (this *ArticleRouter) InitArticleRouter(router *gin.RouterGroup) {
 	router.GET("/article/detail", apiGroup.ArticleDetailByTitleView)
 	router.GET("/article/calendar", apiGroup.ArticleCalendarView)
 	router.GET("/article/tag", apiGroup.ArticleTagListView)
+	router.PUT("/article", middleware.JwtAdmin(), apiGroup.ArticleUpdateView)
 }

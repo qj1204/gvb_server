@@ -9,34 +9,34 @@ import (
 
 // ArticleModel 文章表
 type ArticleModel struct {
-	ID        string `json:"id"`         // es的id
-	CreatedAt string `json:"created_at"` // 创建时间
-	UpdatedAt string `json:"updated_at"` // 更新时间
+	ID        string `json:"id" structs:"id"`                 // es的id
+	CreatedAt string `json:"created_at" structs:"created_at"` // 创建时间
+	UpdatedAt string `json:"updated_at" structs:"updated_at"` // 更新时间
 
-	Title    string `json:"title"`              // 文章标题
-	Keyword  string `json:"keyword,omit(list)"` // 文章关键字（在list场景中，过滤掉keyword字段）
-	Abstract string `json:"abstract"`           // 文章简介
-	Content  string `json:"content,omit(list)"` // 文章内容（在list场景中，过滤掉content字段）
+	Title    string `json:"title" structs:"title"`                // 文章标题
+	Keyword  string `json:"keyword,omit(list)" structs:"keyword"` // 文章关键字（在list场景中，过滤掉keyword字段）
+	Abstract string `json:"abstract" structs:"abstract"`          // 文章简介
+	Content  string `json:"content,omit(list)" structs:"content"` // 文章内容（在list场景中，过滤掉content字段）
 
-	LookCount     int `json:"look_count"`     // 文章浏览量
-	CommentCount  int `json:"comment_count"`  // 文章评论量
-	DiggCount     int `json:"digg_count"`     // 文章点赞量
-	CollectsCount int `json:"collects_count"` // 文章收藏量
+	LookCount     int `json:"look_count" structs:"look_count"`         // 文章浏览量
+	CommentCount  int `json:"comment_count" structs:"comment_count"`   // 文章评论量
+	DiggCount     int `json:"digg_count" structs:"digg_count"`         // 文章点赞量
+	CollectsCount int `json:"collects_count" structs:"collects_count"` // 文章收藏量
 
 	// --------用户 一对多 文章--------
-	UserID       uint   `json:"user_id"`        // 用户ID
-	UserNickName string `json:"user_nick_name"` // 文章作者（不是冗余，用空间换时间，节省查找的时间）
-	UserAvatar   string `json:"user_avatar"`    // 文章作者头像（不是冗余，用空间换时间，节省查找的时间）
+	UserID       uint   `json:"user_id" structs:"user_id"`               // 用户ID
+	UserNickName string `json:"user_nick_name" structs:"user_nick_name"` // 文章作者（不是冗余，用空间换时间，节省查找的时间）
+	UserAvatar   string `json:"user_avatar" structs:"user_avatar"`       // 文章作者头像（不是冗余，用空间换时间，节省查找的时间）
 
-	Category string `json:"category"` // 文章分类
-	Source   string `json:"source"`   // 文章来源
-	Link     string `json:"link"`     // 原文链接
+	Category string `json:"category" structs:"category"` // 文章分类
+	Source   string `json:"source" structs:"source"`     // 文章来源
+	Link     string `json:"link" structs:"link"`         // 原文链接
 
 	// --------文章 belongs to 封面--------
-	BannerID  uint   `json:"banner_id"`  // 文章封面ID
-	BannerUrl string `json:"banner_url"` // 文章封面（不是冗余，用空间换时间，节省查找的时间）
+	BannerID  uint   `json:"banner_id" structs:"banner_id"`   // 文章封面ID
+	BannerUrl string `json:"banner_url" structs:"banner_url"` // 文章封面（不是冗余，用空间换时间，节省查找的时间）
 
-	Tags ctype.Array `json:"tags"` // 文章标签
+	Tags ctype.Array `json:"tags" structs:"tags"` // 文章标签
 }
 
 func (this ArticleModel) Index() string {
