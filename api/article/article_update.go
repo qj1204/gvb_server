@@ -2,7 +2,6 @@ package article
 
 import (
 	"context"
-	"fmt"
 	"github.com/fatih/structs"
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
@@ -57,6 +56,14 @@ func (this *ArticleApi) ArticleUpdateView(c *gin.Context) {
 		BannerUrl: bannerUrl,
 		Tags:      cr.Tags,
 	}
+	// 判断文章是否存在
+	err = article.GetArticleByID(cr.ID)
+	if err != nil {
+		global.Log.Error(err)
+		response.FailWithMessage("文章不存在", c)
+		return
+	}
+
 	maps := structs.Map(&article)
 	// 去掉空值
 	for k, v := range maps {
@@ -79,7 +86,6 @@ func (this *ArticleApi) ArticleUpdateView(c *gin.Context) {
 			}
 		}
 	}
-	fmt.Println(maps)
 
 	_, err = global.ESClient.
 		Update().

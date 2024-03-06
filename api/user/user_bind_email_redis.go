@@ -40,7 +40,7 @@ func (this *UserApi) UserBindEmailViewRedis(c *gin.Context) {
 			response.FailWithMessage("redis错误", c)
 			return
 		}
-		email.NewCode().Send(cr.Email, fmt.Sprintf("你的验证码是：%s，有效时间为%d分钟", code, global.Config.Redis.TTL))
+		email.NewCode().Send(cr.Email, fmt.Sprintf("您的验证码是：%s，有效时间为%d分钟", code, global.Config.Redis.TTL))
 		if err != nil {
 			global.Log.Error(err)
 			response.FailWithMessage("验证码发送失败", c)

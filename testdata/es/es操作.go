@@ -164,7 +164,7 @@ func Update(id string, data *DemoModel) error {
 func Remove(idList []string) (count int, err error) {
 	bulkService := client.Bulk().Index(DemoModel{}.Index()).Refresh("true")
 	for _, id := range idList {
-		req := elastic.NewBulkDeleteRequest().Index(DemoModel{}.Index()).Id(id)
+		req := elastic.NewBulkDeleteRequest().Id(id)
 		bulkService.Add(req)
 	}
 	res, err := bulkService.Do(context.Background())

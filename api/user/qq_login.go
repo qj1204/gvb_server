@@ -27,7 +27,7 @@ func (this *UserApi) QQLoginView(c *gin.Context) {
 	// 根据openID查询用户是否存在
 	var user models.UserModel
 	err = global.DB.Take(&user, "token = ?", openID).Error
-	// 随机生成16位初始密码
+	// 随机生成16位初始密码（可以把初始密码发给用户，然后提示用户修改密码并绑定邮箱）
 	initialPwd := random.RandString(16)
 	if err != nil {
 		// 用户不存在，就注册
@@ -35,7 +35,7 @@ func (this *UserApi) QQLoginView(c *gin.Context) {
 		user = models.UserModel{
 			NickName:   qqInfo.Nickname,
 			UserName:   openID,
-			Password:   hashPwd, // 随机生成16位密码（可以把初始密码提供给用户，然后再修改密码）
+			Password:   hashPwd, // 随机生成16位密码
 			Avatar:     qqInfo.Avatar,
 			Addr:       "内网", // 根据ip算地址
 			Token:      openID,
