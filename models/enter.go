@@ -18,3 +18,7 @@ type Page struct {
 type RemoveRequest struct {
 	IDList []int `json:"id_list"`
 }
+
+type ESIDRequest struct {
+	ID string `json:"id" form:"id" uri:"id"`
+}

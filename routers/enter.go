@@ -16,6 +16,7 @@ type RouterGroup struct {
 	TagRouterGroup    TagRouter
 	MessageRouter     MessageRouter
 	ArticleRouter     ArticleRouter
+	DiggRouter        DiggRouter
 }
 
 var RouterGroupApp = new(RouterGroup)
@@ -35,6 +36,7 @@ func InitRouter() *gin.Engine {
 		RouterGroupApp.TagRouterGroup.InitTagRouter(apiRouterGroup)
 		RouterGroupApp.MessageRouter.InitMessageRouter(apiRouterGroup)
 		RouterGroupApp.ArticleRouter.InitArticleRouter(apiRouterGroup)
+		RouterGroupApp.DiggRouter.InitDiggRouter(apiRouterGroup)
 	}
 	return router
 }

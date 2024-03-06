@@ -3,6 +3,7 @@ package api
 import (
 	"gvb_server/api/advert"
 	"gvb_server/api/article"
+	"gvb_server/api/digg"
 	"gvb_server/api/image"
 	"gvb_server/api/menu"
 	"gvb_server/api/message"
@@ -20,6 +21,7 @@ type ApiGroup struct {
 	TagApiGroup     tag.TagApi
 	MessageApiGroup message.MessageApi
 	ArticleApiGroup article.ArticleApi
+	DiggApiGroup    digg.DiggApi
 }
 
 var ApiGroupApp = new(ApiGroup) // 创建一个ApiGroupApp实例

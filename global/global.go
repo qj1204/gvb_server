@@ -1,8 +1,8 @@
 package global
 
 import (
-	"github.com/go-redis/redis/v8"
 	"github.com/olivere/elastic/v7"
+	"github.com/redis/go-redis/v9"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
