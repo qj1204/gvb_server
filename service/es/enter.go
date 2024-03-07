@@ -155,3 +155,13 @@ func CommonDetailByKeyword(key string) (article models.ArticleModel, err error) 
 	article.ID = hit.Id
 	return
 }
+
+func ArticleUpdate(id string, maps map[string]any) error {
+	_, err := global.ESClient.
+		Update().
+		Index(models.ArticleModel{}.Index()).
+		Id(id).
+		Doc(maps).
+		Do(context.Background())
+	return err
+}

@@ -22,7 +22,7 @@ func CommonList[T any](model T, option Option) (list []T, count int64, err error
 	}
 
 	query := DB.Where(model) // 这样可以查询model里的字段
-	count = query.Select("id").Find(&list).RowsAffected
+	count = query.Find(&list).RowsAffected
 	// 这里的query会受上面的查询的影响，需要手动复位
 	query = DB.Where(model)
 	offset := option.Limit * (option.PageNum - 1) // 由前端传过来，PageNum肯定不为0

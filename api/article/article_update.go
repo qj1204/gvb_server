@@ -1,13 +1,13 @@
 package article
 
 import (
-	"context"
 	"github.com/fatih/structs"
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
 	"gvb_server/models"
 	"gvb_server/models/common/ctype"
 	"gvb_server/models/common/response"
+	"gvb_server/service/es"
 	"time"
 )
 
@@ -87,12 +87,7 @@ func (this *ArticleApi) ArticleUpdateView(c *gin.Context) {
 		}
 	}
 
-	_, err = global.ESClient.
-		Update().
-		Index(models.ArticleModel{}.Index()).
-		Id(cr.ID).
-		Doc(maps).
-		Do(context.Background())
+	err = es.ArticleUpdate(cr.ID, maps)
 	if err != nil {
 		global.Log.Error(err)
 		response.FailWithMessage("文章更新失败", c)

@@ -16,6 +16,7 @@ func MakeMigrations() {
 		&models.BannerModel{},
 		&models.TagModel{},
 		//&models.ArticleModel{},
+		&models.UserCollectModel{},
 		&models.MessageModel{},
 		&models.AdvertModel{},
 		&models.CommentModel{},
