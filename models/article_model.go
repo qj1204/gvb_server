@@ -2,7 +2,6 @@ package models
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/olivere/elastic/v7"
 	"gvb_server/global"
 	"gvb_server/models/common/ctype"
@@ -138,7 +137,7 @@ func (this ArticleModel) RemoveIndex() error {
 }
 
 // InsertArticle 添加文章
-func (this ArticleModel) InsertArticle() error {
+func (this *ArticleModel) InsertArticle() error {
 	indexResponse, err := global.ESClient.
 		Index().
 		Index(this.Index()).
@@ -165,18 +164,4 @@ func (this ArticleModel) ArticleExists() bool {
 		return false
 	}
 	return res.TotalHits() > 0
-}
-
-// GetArticleByID 根据ID获取文章
-func (this *ArticleModel) GetArticleByID(id string) error {
-	res, err := global.ESClient.
-		Get().
-		Index(this.Index()).
-		Id(id).
-		Do(context.Background())
-	if err != nil {
-		return err
-	}
-	err = json.Unmarshal(res.Source, this)
-	return err
 }

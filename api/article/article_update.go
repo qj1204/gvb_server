@@ -32,6 +32,14 @@ func (this *ArticleApi) ArticleUpdateView(c *gin.Context) {
 		return
 	}
 
+	oldArticle, err := es.CommonDetail(cr.ID)
+	// 判断文章是否存在
+	if err != nil {
+		global.Log.Error(err)
+		response.FailWithMessage("文章不存在", c)
+		return
+	}
+
 	// 更新banner
 	var bannerUrl string
 	if cr.BannerID != 0 {
@@ -43,7 +51,7 @@ func (this *ArticleApi) ArticleUpdateView(c *gin.Context) {
 		}
 	}
 
-	article := models.ArticleModel{
+	tmpArticle := models.ArticleModel{
 		UpdatedAt: time.Now().Format("2006-01-02 15:04:05"),
 		Title:     cr.Title,
 		Keyword:   cr.Title,
@@ -56,15 +64,8 @@ func (this *ArticleApi) ArticleUpdateView(c *gin.Context) {
 		BannerUrl: bannerUrl,
 		Tags:      cr.Tags,
 	}
-	// 判断文章是否存在
-	err = article.GetArticleByID(cr.ID)
-	if err != nil {
-		global.Log.Error(err)
-		response.FailWithMessage("文章不存在", c)
-		return
-	}
 
-	maps := structs.Map(&article)
+	maps := structs.Map(&tmpArticle)
 	// 去掉空值
 	for k, v := range maps {
 		switch val := v.(type) {
@@ -92,6 +93,13 @@ func (this *ArticleApi) ArticleUpdateView(c *gin.Context) {
 		global.Log.Error(err)
 		response.FailWithMessage("文章更新失败", c)
 		return
+	}
+
+	// 更新全文搜索
+	newArticle, _ := es.CommonDetail(cr.ID)
+	if oldArticle.Title != newArticle.Title || oldArticle.Content != newArticle.Content {
+		go es.DeleteFullTextByArticleID(cr.ID)
+		go es.AsyncArticleByFullText(cr.ID, newArticle.Title, newArticle.Content)
 	}
 	response.OkWithMessage("文章更新成功", c)
 }

@@ -8,6 +8,8 @@ import (
 	"gvb_server/global"
 	"gvb_server/models"
 	"gvb_server/models/common/response"
+	"gvb_server/service/es"
+	"gvb_server/utils/jwt"
 )
 
 type IDListRequest struct {
@@ -21,10 +23,18 @@ func (this *ArticleApi) ArticleRemoveView(c *gin.Context) {
 		return
 	}
 
+	_claims, _ := c.Get("claims")
+	claims := _claims.(*jwt.CustomClaims)
+
+	// 如果文章删除了，用户收藏这篇文章怎么办
+	// 1、顺带把与这个文章关联的收藏记录删除
+	// 2、用户收藏表中，增加一个字段，记录文章是否被删除
 	bulkService := global.ESClient.Bulk().Index(models.ArticleModel{}.Index()).Refresh("true")
 	for _, id := range cr.IDList {
 		req := elastic.NewBulkDeleteRequest().Id(id)
 		bulkService.Add(req)
+		go es.DeleteFullTextByArticleID(id)
+		go global.DB.Where("user_id = ? and article_id = ?", claims.UserID, id).Delete(&models.UserCollectModel{})
 	}
 	res, err := bulkService.Do(context.Background())
 	if err != nil {

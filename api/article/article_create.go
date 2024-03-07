@@ -9,6 +9,7 @@ import (
 	"gvb_server/models"
 	"gvb_server/models/common/ctype"
 	"gvb_server/models/common/response"
+	"gvb_server/service/es"
 	"gvb_server/utils/jwt"
 	"gvb_server/utils/random"
 	"strings"
@@ -119,5 +120,8 @@ func (this *ArticleApi) ArticleCreateView(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+
+	// 同步文章数据到全文搜索索引
+	go es.AsyncArticleByFullText(article.ID, article.Title, article.Content)
 	response.OkWithMessage("文章发布成功", c)
 }
