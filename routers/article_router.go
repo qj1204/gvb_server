@@ -21,4 +21,5 @@ func (this *ArticleRouter) InitArticleRouter(router *gin.RouterGroup) {
 	router.POST("/article/collect", middleware.JwtAuth(), apiGroup.ArticleCollectCreateView)
 	router.GET("/article/collect", middleware.JwtAuth(), apiGroup.ArticleCollectListView)
 	router.DELETE("/article/collect", middleware.JwtAuth(), apiGroup.ArticleCollectRemoveView)
+	router.GET("/article/text", apiGroup.FullTextSearchView)
 }

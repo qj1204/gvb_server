@@ -82,6 +82,7 @@ func AsyncArticleByFullText(id, title, content string) {
 	result, err := bulk.Do(context.Background())
 	if err != nil {
 		global.Log.Error(err.Error())
+		
 		return
 	}
 	global.Log.Infof(fmt.Sprintf("%s添加成功，共%d条", title, len(result.Succeeded())))

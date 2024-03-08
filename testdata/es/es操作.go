@@ -82,12 +82,7 @@ func FindList(key string, page int, limit int) (demoList []DemoModel, count int)
 
 	for _, hit := range res.Hits.Hits {
 		var demo DemoModel
-		data, err := hit.Source.MarshalJSON()
-		if err != nil {
-			logrus.Error(err.Error())
-			continue
-		}
-		err = json.Unmarshal(data, &demo)
+		err = json.Unmarshal(hit.Source, &demo)
 		if err != nil {
 			logrus.Error(err.Error())
 			continue
@@ -126,12 +121,7 @@ func FindSourceList(key string, page int, limit int) {
 	var demoList []DemoModel
 	for _, hit := range res.Hits.Hits {
 		var demo DemoModel
-		data, err := hit.Source.MarshalJSON()
-		if err != nil {
-			logrus.Error(err.Error())
-			continue
-		}
-		err = json.Unmarshal(data, &demo)
+		err = json.Unmarshal(hit.Source, &demo)
 		if err != nil {
 			logrus.Error(err.Error())
 			continue

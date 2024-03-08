@@ -54,12 +54,7 @@ func CommonList(option Option) (list []models.ArticleModel, count int, err error
 
 	for _, hit := range res.Hits.Hits {
 		var article models.ArticleModel
-		data, err := hit.Source.MarshalJSON()
-		if err != nil {
-			global.Log.Error(err.Error())
-			continue
-		}
-		err = json.Unmarshal(data, &article)
+		err = json.Unmarshal(hit.Source, &article)
 		if err != nil {
 			global.Log.Error(err.Error())
 			continue
