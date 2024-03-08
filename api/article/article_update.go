@@ -32,8 +32,8 @@ func (this *ArticleApi) ArticleUpdateView(c *gin.Context) {
 		return
 	}
 
-	oldArticle, err := es.CommonDetail(cr.ID)
 	// 判断文章是否存在
+	oldArticle, err := es.CommonDetail(cr.ID)
 	if err != nil {
 		global.Log.Error(err)
 		response.FailWithMessage("文章不存在", c)

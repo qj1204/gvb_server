@@ -93,41 +93,51 @@ func CommonList(option Option) (list []models.ArticleModel, count int, err error
 }
 
 func CommonDetail(id string) (article models.ArticleModel, err error) {
-	res, err := global.ESClient.Get().
-		Index(models.ArticleModel{}.Index()).
-		Id(id).
-		Do(context.Background())
+	result, err := SearchArticleByID(id)
 	if err != nil {
 		return
 	}
-	err = json.Unmarshal(res.Source, &article)
+	err = json.Unmarshal(result.Source, &article)
 	if err != nil {
 		return
 	}
-	article.ID = res.Id
+	article.ID = result.Id
 	article.DiggCount = article.DiggCount + redis.GetDigg(id)
 	article.LookCount = article.LookCount + redis.GetLook(id)
 	return
 }
 
 func CommonDetailByKeyword(key string) (article models.ArticleModel, err error) {
-	res, err := global.ESClient.Search().
-		Index(models.ArticleModel{}.Index()).
-		Query(elastic.NewTermQuery("keyword", key)).
-		Do(context.Background())
+	result, err := SearchArticleByTitle(key)
 	if err != nil {
 		return
 	}
-	if res.Hits.TotalHits.Value == 0 {
+	if result.Hits.TotalHits.Value == 0 {
 		return article, errors.New("文章不存在")
 	}
-	hit := res.Hits.Hits[0]
+	hit := result.Hits.Hits[0]
 	err = json.Unmarshal(hit.Source, &article)
 	if err != nil {
 		return
 	}
 	article.ID = hit.Id
 	return
+}
+
+func SearchArticleByID(id string) (*elastic.GetResult, error) {
+	result, err := global.ESClient.Get().
+		Index(models.ArticleModel{}.Index()).
+		Id(id).
+		Do(context.Background())
+	return result, err
+}
+
+func SearchArticleByTitle(title string) (*elastic.SearchResult, error) {
+	result, err := global.ESClient.
+		Search(models.ArticleModel{}.Index()).
+		Query(elastic.NewTermQuery("keyword", title)).
+		Do(context.Background())
+	return result, err
 }
 
 func ArticleUpdate(id string, maps map[string]any) error {

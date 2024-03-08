@@ -1,5 +1,6 @@
 package article
 
+import "C"
 import (
 	md "github.com/JohannesKaufmann/html-to-markdown"
 	"github.com/PuerkitoBio/goquery"
@@ -34,6 +35,14 @@ func (this *ArticleApi) ArticleCreateView(c *gin.Context) {
 	err := c.ShouldBindJSON(&cr)
 	if err != nil {
 		response.FailWithError(err, &cr, c)
+		return
+	}
+
+	// 判断标题是否重复
+	_, err = es.CommonDetailByKeyword(cr.Title)
+	if err != nil {
+		global.Log.Error(err)
+		response.FailWithMessage("文章已存在", c)
 		return
 	}
 
@@ -106,12 +115,6 @@ func (this *ArticleApi) ArticleCreateView(c *gin.Context) {
 		BannerID:     cr.BannerID,
 		BannerUrl:    bannerUrl,
 		Tags:         cr.Tags,
-	}
-
-	// 判断标题是否重复
-	if article.ArticleExists() {
-		response.FailWithMessage("文章已存在", c)
-		return
 	}
 
 	err = article.InsertArticle()

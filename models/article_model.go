@@ -2,7 +2,6 @@ package models
 
 import (
 	"context"
-	"github.com/olivere/elastic/v7"
 	"gvb_server/global"
 	"gvb_server/models/common/ctype"
 )
@@ -150,18 +149,4 @@ func (this *ArticleModel) InsertArticle() error {
 	global.Log.Infof("添加文章成功，%#v", indexResponse)
 	this.ID = indexResponse.Id
 	return nil
-}
-
-// ArticleExists 文章是否存在
-func (this ArticleModel) ArticleExists() bool {
-	res, err := global.ESClient.
-		Search(this.Index()).
-		Query(elastic.NewTermQuery("keyword", this.Title)). // 精确匹配
-		Size(1).
-		Do(context.Background())
-	if err != nil {
-		global.Log.Error(err)
-		return false
-	}
-	return res.TotalHits() > 0
 }
