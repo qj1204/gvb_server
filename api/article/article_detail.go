@@ -15,7 +15,7 @@ func (this *ArticleApi) ArticleDetailView(c *gin.Context) {
 		response.FailWithCode(gin.ErrorTypeBind, c)
 		return
 	}
-	redis.Look(cr.ID)
+	redis.NewArticleLookCount().Set(cr.ID)
 	article, err := es.CommonDetail(cr.ID)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)

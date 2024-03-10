@@ -18,7 +18,8 @@ func main() {
 	//keys, err := cmd.Result()
 	//fmt.Println(keys, err)
 
-	redis.Digg("ZhKLDo4Beq8OFDNuzYQB")
-	fmt.Println(redis.GetDiggInfo())
+	digg := redis.NewArticleDiggCount()
+	digg.Set("ZhKLDo4Beq8OFDNuzYQB")
+	fmt.Println(digg.GetInfo())
 	//redis.DiggClear()
 }

@@ -16,6 +16,6 @@ func (this *DiggApi) DiggArticleView(c *gin.Context) {
 	}
 	// 这里可以校验文章id
 	// 查es
-	redis.Digg(cr.ID)
+	redis.NewArticleDiggCount().Set(cr.ID)
 	response.OkWithMessage("文章点赞成功", c)
 }

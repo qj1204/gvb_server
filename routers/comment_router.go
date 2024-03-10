@@ -12,5 +12,6 @@ func (this *CommentRouter) InitCommentRouter(router *gin.RouterGroup) {
 	apiGroup := api.ApiGroupApp.CommentApi
 	router.POST("/comment", middleware.JwtAuth(), apiGroup.CommentCreateView)
 	router.GET("/comment", apiGroup.CommentListView)
-
+	router.GET("/comment/:id", middleware.JwtAuth(), apiGroup.CommentDiggView)
+	router.DELETE("/comment/:id", middleware.JwtAuth(), apiGroup.CommentRemoveView)
 }

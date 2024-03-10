@@ -60,7 +60,7 @@ func (this *CommentApi) CommentCreateView(c *gin.Context) {
 	})
 
 	// 拿到文章评论数，新的评论数存到redis
-	redis.Comment(cr.ArticleID)
+	redis.NewArticleCommentCount().Set(cr.ArticleID)
 
 	response.OkWithMessage("评论成功", c)
 }

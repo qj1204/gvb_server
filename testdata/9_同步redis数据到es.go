@@ -26,7 +26,7 @@ func main() {
 		return
 	}
 
-	diggInfo := redis.GetDiggInfo()
+	diggInfo := redis.NewArticleDiggCount().GetInfo()
 
 	for _, hit := range res.Hits.Hits {
 		var article models.ArticleModel
@@ -51,5 +51,5 @@ func main() {
 	}
 
 	global.Log.Info("更新索引成功")
-	redis.DiggClear()
+	redis.NewArticleDiggCount().Clear()
 }

@@ -35,6 +35,8 @@ func (this *ArticleApi) ArticleRemoveView(c *gin.Context) {
 		bulkService.Add(req)
 		go es.DeleteFullTextByArticleID(id)
 		go global.DB.Where("user_id = ? and article_id = ?", claims.UserID, id).Delete(&models.UserCollectModel{})
+		// TODO: 删除数据库中的评论
+		// TODO: 删除redis中的文章点赞数、浏览量、评论数，对应的评论点赞数也要删
 	}
 	res, err := bulkService.Do(context.Background())
 	if err != nil {
