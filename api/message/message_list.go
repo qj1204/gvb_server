@@ -43,7 +43,7 @@ func (this *MessageApi) MessageListView(c *gin.Context) {
 			CreateAt:         message.CreatedAt,
 			MessageCount:     1,
 		}
-		idNum := message.SendUserID + message.ReceiveUserID // 对当前用户来说，与其他用户的id之后保证唯一
+		idNum := message.SendUserID + message.ReceiveUserID // 对当前用户来说，与其他用户的id之和保证唯一
 		val, ok := msgGroup[idNum]
 		if !ok {
 			// 不存在

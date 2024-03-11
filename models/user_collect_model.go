@@ -7,6 +7,5 @@ type UserCollectModel struct {
 	CreatedAt time.Time `json:"created_at"`
 	UserID    uint      `gorm:"primaryKey"`
 	UserModel UserModel `gorm:"foreignKey:UserID"`
-
-	ArticleID string `gorm:"size:32,primaryKey"`
+	ArticleID string    `gorm:"size:32;primaryKey"`
 }

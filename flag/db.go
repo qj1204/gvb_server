@@ -23,6 +23,7 @@ func MakeMigrations() {
 		&models.MenuBannerModel{},
 		&models.FeedbackModel{},
 		&models.LoginDataModel{},
+		&models.ChatModel{},
 	)
 	if err != nil {
 		global.Log.Error("[error] 生成数据库表失败")
