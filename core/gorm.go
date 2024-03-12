@@ -28,6 +28,7 @@ func InitGorm() *gorm.DB {
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: mysqlLogger,
+		// DisableForeignKeyConstraintWhenMigrating: true, // 数据迁移时数据库中不生成外键，但查询时可以关联
 	})
 	if err != nil {
 		global.Log.Error(fmt.Sprintf("[%s] mysql连接失败", dsn))

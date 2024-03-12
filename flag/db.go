@@ -3,6 +3,7 @@ package flag
 import (
 	"gvb_server/global"
 	"gvb_server/models"
+	"gvb_server/plugins/log_stash"
 )
 
 func MakeMigrations() {
@@ -24,6 +25,7 @@ func MakeMigrations() {
 		&models.FeedbackModel{},
 		&models.LoginDataModel{},
 		&models.ChatModel{},
+		&log_stash.LogStashModel{},
 	)
 	if err != nil {
 		global.Log.Error("[error] 生成数据库表失败")

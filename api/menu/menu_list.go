@@ -31,7 +31,7 @@ func (this *MenuApi) MenuListView(c *gin.Context) {
 	{1 5 {{0 0001-01-01 00:00:00 +0000 UTC 0001-01-01 00:00:00 +0000 UTC}    [] 0 [] 0 0} {{5 2024-02-27 16:52:44.323 +0800 CST 2024-02-27 16:52:44.323 +0800 CST} http://qiniu.xiaoxinqj.top/gvb/20240227165244_a5.jpg 15365249953e302b36f539e29f37f9aa a5.jpg 七牛云} 1}
 	{1 4 {{0 0001-01-01 00:00:00 +0000 UTC 0001-01-01 00:00:00 +0000 UTC}    [] 0 [] 0 0} {{4 2024-02-27 16:52:44.239 +0800 CST 2024-02-27 16:52:44.239 +0800 CST} http://qiniu.xiaoxinqj.top/gvb/20240227165243_a4.jpg 7822a6008d890a2357aff37955478d3b a4.jpg 七牛云} 0}
 	]*/
-	var menuResponseList []MenuResponse
+	var menuResponseList = make([]MenuResponse, 0)
 	for _, menu := range menuList {
 		// 解决null值的问题
 		var banners = make([]Banner, 0)

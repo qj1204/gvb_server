@@ -5,8 +5,9 @@ import (
 	"gvb_server/api/article"
 	"gvb_server/api/chat"
 	"gvb_server/api/comment"
-	"gvb_server/api/digg"
+	"gvb_server/api/data"
 	"gvb_server/api/image"
+	"gvb_server/api/log_api"
 	"gvb_server/api/menu"
 	"gvb_server/api/message"
 	"gvb_server/api/news"
@@ -24,10 +25,11 @@ type ApiGroup struct {
 	TagApiGroup     tag.TagApi
 	MessageApiGroup message.MessageApi
 	ArticleApiGroup article.ArticleApi
-	DiggApiGroup    digg.DiggApi
-	CommentApi      comment.CommentApi
-	NewsApi         news.NewsApi
-	ChatApi         chat.ChatApi
+	CommentApiGroup comment.CommentApi
+	NewsApiGroup    news.NewsApi
+	ChatApiGroup    chat.ChatApi
+	LogApiGroup     log_api.LogApi
+	DataApi         data.DataApi
 }
 
 var ApiGroupApp = new(ApiGroup) // 创建一个ApiGroupApp实例

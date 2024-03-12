@@ -8,6 +8,6 @@ import (
 type NewsRouter struct{}
 
 func (this *NewsRouter) InitNewsRouter(router *gin.RouterGroup) {
-	apiGroup := api.ApiGroupApp.NewsApi
+	apiGroup := api.ApiGroupApp.NewsApiGroup
 	router.POST("/news", apiGroup.NewsListView)
 }

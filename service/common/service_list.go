@@ -1,6 +1,7 @@
 package common
 
 import (
+	"fmt"
 	"gorm.io/gorm"
 	"gvb_server/global"
 	"gvb_server/models"
@@ -9,6 +10,7 @@ import (
 type Option struct {
 	models.Page
 	Debug bool
+	Likes []string // 模糊匹配的字段
 }
 
 func CommonList[T any](model T, option Option) (list []T, count int64, err error) {
@@ -22,15 +24,23 @@ func CommonList[T any](model T, option Option) (list []T, count int64, err error
 	}
 
 	query := DB.Where(model) // 这样可以查询model里的字段
+	for index, cloumn := range option.Likes {
+		if index == 0 { // 第一个like
+			query = query.Where(fmt.Sprintf("%s like ?", cloumn), "%"+option.Key+"%")
+		} else { // 后面的like
+			query = query.Or(fmt.Sprintf("%s like ?", cloumn), "%"+option.Key+"%")
+		}
+	}
+	q1 := query
 	count = query.Find(&list).RowsAffected
 	// 这里的query会受上面的查询的影响，需要手动复位
-	query = DB.Where(model)
+	// query = query.Where(model)
 	offset := option.Limit * (option.PageNum - 1) // 由前端传过来，PageNum肯定不为0
 	offset = max(offset, 0)
 	if option.Limit == 0 {
 		option.Limit = -1
 	}
 	// 当limit为-1时，表示不分页，下面的limit不生效
-	err = query.Offset(offset).Limit(option.Limit).Order(option.Sort).Find(&list).Error
+	err = q1.Offset(offset).Limit(option.Limit).Order(option.Sort).Find(&list).Error
 	return
 }

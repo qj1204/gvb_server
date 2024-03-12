@@ -9,7 +9,7 @@ import (
 type CommentRouter struct{}
 
 func (this *CommentRouter) InitCommentRouter(router *gin.RouterGroup) {
-	apiGroup := api.ApiGroupApp.CommentApi
+	apiGroup := api.ApiGroupApp.CommentApiGroup
 	router.POST("/comment", middleware.JwtAuth(), apiGroup.CommentCreateView)
 	router.GET("/comment", apiGroup.CommentListView)
 	router.GET("/comment/:id", middleware.JwtAuth(), apiGroup.CommentDiggView)

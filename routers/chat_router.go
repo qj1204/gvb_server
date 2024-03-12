@@ -8,7 +8,7 @@ import (
 type ChatRouter struct{}
 
 func (this *ChatRouter) InitChatRouter(router *gin.RouterGroup) {
-	apiGroup := api.ApiGroupApp.ChatApi
+	apiGroup := api.ApiGroupApp.ChatApiGroup
 	router.GET("/chat_group", apiGroup.ChatGroupView)
 	router.GET("/chat_group_record", apiGroup.ChatListView)
 }
