@@ -2,6 +2,7 @@ package global
 
 import (
 	"github.com/olivere/elastic/v7"
+	"github.com/oschwald/geoip2-golang"
 	"github.com/redis/go-redis/v9"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
@@ -16,4 +17,5 @@ var (
 	MysqlLog logger.Interface // MysqlLog显示所有的sql
 	Redis    *redis.Client
 	ESClient *elastic.Client
+	AddrDB   *geoip2.Reader
 )

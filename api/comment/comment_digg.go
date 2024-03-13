@@ -27,7 +27,6 @@ func (this *CommentApi) CommentDiggView(c *gin.Context) {
 		response.FailWithMessage("评论不存在", c)
 		return
 	}
-	// TODO: 评论点赞同步到数据库
 	redis.NewCommentDiggCount().Set(fmt.Sprintf("%d", cr.ID))
 	response.OkWithMessage("评论点赞成功", c)
 }

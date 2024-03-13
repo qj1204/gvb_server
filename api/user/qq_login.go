@@ -7,6 +7,7 @@ import (
 	"gvb_server/models/common/ctype"
 	"gvb_server/models/common/response"
 	"gvb_server/plugins/qq"
+	"gvb_server/utils"
 	"gvb_server/utils/jwt"
 	"gvb_server/utils/pwd"
 	"gvb_server/utils/random"
@@ -29,6 +30,7 @@ func (this *UserApi) QQLoginView(c *gin.Context) {
 	err = global.DB.Take(&user, "token = ?", openID).Error
 	// 随机生成16位初始密码（可以把初始密码发给用户，然后提示用户修改密码并绑定邮箱）
 	initialPwd := random.RandString(16)
+	ip, addr := utils.GetAddrByGin(c)
 	if err != nil {
 		// 用户不存在，就注册
 		hashPwd := pwd.HashPwd(initialPwd)
@@ -37,9 +39,9 @@ func (this *UserApi) QQLoginView(c *gin.Context) {
 			UserName:   openID,
 			Password:   hashPwd, // 随机生成16位密码
 			Avatar:     qqInfo.Avatar,
-			Addr:       "内网", // 根据ip算地址
+			Addr:       addr, // 根据ip算地址
 			Token:      openID,
-			IP:         c.ClientIP(),
+			IP:         ip,
 			Role:       ctype.PermissionUser,
 			SignStatus: ctype.SignQQ,
 		}
@@ -66,11 +68,11 @@ func (this *UserApi) QQLoginView(c *gin.Context) {
 
 	global.DB.Create(&models.LoginDataModel{
 		UserID:    user.ID,
-		IP:        c.ClientIP(),
+		IP:        ip,
 		NickName:  user.NickName,
 		Token:     token,
 		Device:    "web",
-		Addr:      "内网",
+		Addr:      addr,
 		LoginType: ctype.SignQQ,
 	})
 	response.OkWithData(gin.H{

@@ -40,8 +40,7 @@ func (this *ArticleApi) ArticleCreateView(c *gin.Context) {
 
 	// 判断标题是否重复
 	_, err = es.CommonDetailByKeyword(cr.Title)
-	if err != nil {
-		global.Log.Error(err)
+	if err == nil {
 		response.FailWithMessage("文章已存在", c)
 		return
 	}

@@ -68,31 +68,9 @@ func CommonList(option Option) (list []models.ArticleModel, count int, err error
 		article.DiggCount = article.DiggCount + diggInfo[article.ID]
 		article.LookCount = article.LookCount + lookInfo[article.ID]
 		article.CommentCount = article.CommentCount + commentInfo[article.ID]
-		/*
-			if diggInfo[article.ID] == 0 && lookInfo[article.ID] == 0 {
-				global.Log.Infof("%s 点赞数和浏览量无变化", article.Title)
-				continue
-			}
-			// 更新文章的点赞数、浏览量
-			_, err = global.ESClient.Update().
-				Index(models.ArticleModel{}.Index()).
-				Id(article.ID).
-				Doc(map[string]int{
-					"digg_count": article.DiggCount,
-					"look_count": article.LookCount,
-				}).
-				Do(context.Background())
-			if err != nil {
-				global.Log.Errorf("更新失败，%s", err.Error())
-				continue
-			}
-			global.Log.Infof("%s点赞数同步成功，点赞数%d，浏览量%d", article.Title, article.DiggCount, article.LookCount)
-		*/
+
 		articleList = append(articleList, article)
 	}
-	//redis.NewArticleDiggCount().Clear()
-	//redis.NewArticleLookCount().Clear()
-	//redis.NewArticleCommentCount().Clear()
 	return articleList, count, nil
 }
 
@@ -153,4 +131,27 @@ func ArticleUpdate(id string, maps map[string]any) error {
 		Doc(maps).
 		Do(context.Background())
 	return err
+}
+
+func CommonIDListByTag(tag string) (list []string, err error) {
+	sortField := SortField{ // 默认按照创建时间倒序
+		Field:     "created_at",
+		Ascending: false,
+	}
+
+	res, err := global.ESClient.
+		Search(models.ArticleModel{}.Index()).
+		Query(elastic.NewMultiMatchQuery(tag, "tags")).
+		Sort(sortField.Field, sortField.Ascending).
+		Size(1000).
+		Do(context.Background())
+	if err != nil {
+		return
+	}
+	IDList := make([]string, 0)
+
+	for _, hit := range res.Hits.Hits {
+		IDList = append(IDList, hit.Id)
+	}
+	return IDList, nil
 }

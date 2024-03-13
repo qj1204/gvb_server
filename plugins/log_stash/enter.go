@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
+	"gvb_server/utils"
 	"gvb_server/utils/jwt"
 )
 
@@ -20,7 +21,7 @@ func NewLog(ip, token string) *Log {
 	if err == nil {
 		userID = claims.UserID
 	}
-	return &Log{ip: ip, addr: "内网", userID: userID}
+	return &Log{ip: ip, addr: utils.GetAddr(ip), userID: userID}
 }
 
 func NewLogByGin(c *gin.Context) *Log {

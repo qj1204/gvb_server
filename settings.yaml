@@ -14,7 +14,7 @@ logger_setting:
 system:
     host: 127.0.0.1
     port: 8080
-    env: debug
+    env: release
 upload:
     size: 2
     path: static/uploads

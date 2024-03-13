@@ -10,6 +10,7 @@ import (
 	"gvb_server/models"
 	"gvb_server/models/common/ctype"
 	"gvb_server/models/common/response"
+	"gvb_server/utils"
 	"net/http"
 	"strings"
 	"time"
@@ -176,6 +177,7 @@ func SendMsg(curAddr string, gResponse GroupResponse) {
 
 // GetIPAndAddr 获取用户的ip和地址
 func GetIPAndAddr(curAddr string) (ip, addr string) {
-	userAddr := "内网"
-	return strings.Split(curAddr, ":")[0], userAddr
+	ip = strings.Split(curAddr, ":")[0]
+	addr = utils.GetAddr(ip)
+	return ip, addr
 }

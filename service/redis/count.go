@@ -42,6 +42,12 @@ func (this Count) GetInfo() map[string]int {
 	return DiggInfo
 }
 
+// Delete 删除某个索引的某一条数据
+func (this Count) Delete(id string) error {
+	err := global.Redis.HDel(context.Background(), this.Index, id).Err()
+	return err
+}
+
 // Clear 清空所有索引的数据
 func (this Count) Clear() error {
 	err := global.Redis.Del(context.Background(), this.Index).Err()

@@ -6,6 +6,8 @@ import (
 	"gvb_server/flag"
 	"gvb_server/global"
 	"gvb_server/routers"
+	"gvb_server/service/cron"
+	"gvb_server/utils"
 )
 
 // @title gvb_server API文档
@@ -21,6 +23,9 @@ func main() {
 	// 初始化数据库
 	global.DB = core.InitGorm()
 
+	core.InitAddrDB()
+	defer global.AddrDB.Close()
+
 	// 命令行参数绑定（在连接数据库之后，链接路由之前）
 	option := flag.Parse()
 	if flag.IsWebStop(option) {
@@ -33,9 +38,12 @@ func main() {
 	global.Redis = core.ConnectRedis()
 	// 连接es
 	global.ESClient = core.EsConnect()
+	// 初始化定时任务
+	cron.CronInit()
 
 	addr := global.Config.System.GetAddr()
-	global.Log.Infof("server run on %s", addr)
+	utils.PrintSystem(addr)
+
 	err := routers.InitRouter().Run(addr)
 	if err != nil {
 		global.Log.Fatal(err.Error())

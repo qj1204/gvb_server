@@ -49,7 +49,8 @@ func (this *CommentApi) CommentRemoveView(c *gin.Context) {
 	deleteCommentIDList = append(deleteCommentIDList, comment.ID)
 	for _, id := range deleteCommentIDList {
 		global.DB.Delete(&models.CommentModel{}, id)
-		// TODO: 删除redis中的评论点赞数
+		// 删除redis中的评论点赞数
+		redis.NewCommentDiggCount().Delete(fmt.Sprintf("%d", id))
 	}
 	response.OkWithMessage(fmt.Sprintf("共删除%d条评论", len(deleteCommentIDList)), c)
 }

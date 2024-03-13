@@ -8,6 +8,7 @@ import (
 	"gvb_server/models/common/ctype"
 	"gvb_server/models/common/response"
 	"gvb_server/plugins/log_stash"
+	"gvb_server/utils"
 	"gvb_server/utils/jwt"
 	"gvb_server/utils/pwd"
 )
@@ -60,14 +61,17 @@ func (this *UserApi) EmailLoginView(c *gin.Context) {
 		response.FailWithMessage("生成token失败", c)
 		return
 	}
-	log_stash.NewLog(c.ClientIP(), token).Info(fmt.Sprintf("%s 登录成功", cr.Username))
+
+	ip, addr := utils.GetAddrByGin(c)
+	log_stash.NewLog(ip, token).Info(fmt.Sprintf("%s 登录成功", cr.Username))
+
 	global.DB.Create(&models.LoginDataModel{
 		UserID:    userModel.ID,
-		IP:        c.ClientIP(),
+		IP:        ip,
 		NickName:  userModel.NickName,
 		Token:     token,
 		Device:    "web",
-		Addr:      "内网",
+		Addr:      addr,
 		LoginType: ctype.SignEmail,
 	})
 	response.OkWithData(token, c)
