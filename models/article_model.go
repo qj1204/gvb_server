@@ -119,6 +119,10 @@ func (this ArticleModel) CreateIndex() error {
 
 // RemoveIndex 删除索引
 func (this ArticleModel) RemoveIndex() error {
+	if !this.IndexExists() {
+		global.Log.Info("索引不存在，无需删除")
+		return nil
+	}
 	global.Log.Info("索引存在，删除索引")
 	indexDelete, err := global.ESClient.
 		DeleteIndex(this.Index()).
