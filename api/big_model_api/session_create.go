@@ -1,0 +1,79 @@
+package big_model_api
+
+import (
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
+	"gvb_server/global"
+	"gvb_server/models"
+	"gvb_server/models/res"
+	"gvb_server/utils/jwts"
+)
+
+type SessionCreateRequest struct {
+	RoleID uint `json:"roleID" binding:"required"` // 角色id
+}
+
+// SessionCreateView 当前用户创建会话
+func (BigModelApi) SessionCreateView(c *gin.Context) {
+	var cr SessionCreateRequest
+	// control request
+	err := c.ShouldBindJSON(&cr)
+	if err != nil {
+		res.FailWithValidError(err, c)
+		return
+	}
+
+	// 找角色
+	var role models.BigModelRoleModel
+	err = global.DB.Take(&role, cr.RoleID).Error
+	if err != nil {
+		res.FailWithMessage("角色不存在", c)
+		return
+	}
+
+	_claims, _ := c.Get("claims")
+	claims := _claims.(*jwts.CustomClaims)
+
+	// 判断这个用户能不能创建会话
+	var user models.UserModel
+	err = global.DB.Take(&user, claims.UserID).Error
+	if err != nil {
+		res.FailWithMessage("用户信息错误", c)
+		return
+	}
+
+	scope := global.Config.BigModel.SessionSetting.SessionScope
+	if user.Scope <= scope {
+		res.FailWithMessage("积分不足，无法创建会话", c)
+		return
+	}
+
+	// 名字默认就是：新的会话
+	// 如果用户有一个会话没有聊天，那就不能再创建新的会话
+	// 找这个用户相关的ai角色，找对话记录条数
+	var sessionList []models.BigModelSessionModel
+	global.DB.Preload("ChatList").Find(&sessionList, "user_id = ? and role_id = ?", claims.UserID, cr.RoleID)
+	var ok bool
+	var sessionID uint
+	for _, session := range sessionList {
+		if len(session.ChatList) <= 0 {
+			ok = true
+			sessionID = session.ID
+		}
+	}
+	if ok {
+		res.Ok(sessionID, "已存在新的会话", c)
+		return
+	}
+
+	var session = models.BigModelSessionModel{
+		UserID: claims.UserID,
+		RoleID: cr.RoleID,
+		Name:   "新的会话",
+	}
+	global.DB.Create(&session)
+
+	// 扣用户的积分
+	global.DB.Model(&user).Update("scope", gorm.Expr("scope - ?", scope))
+	res.Ok(session.ID, "会话创建成功", c)
+}

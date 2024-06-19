@@ -1,0 +1,118 @@
+mysql:
+  host: 127.0.0.1
+  port: 3306
+  config: charset=utf8mb4&parseTime=True&loc=Local
+  db: gvb_db
+  user: root
+  password: 123456
+logger_setting:
+  level: info
+  prefix: gvb
+  director: log
+  show_line: true
+  log_in_console: true
+system:
+  host: 127.0.0.1
+  port: 8080
+  env: release
+site_info:
+  created_at: "2023-09-15"
+  bei_an: 陕ICP备2023003838号-1
+  title: 小新知道
+  qq_image: https://qiniu.xiaoxinqj.fun/static/my/img/qq.png
+  version: 8.0.1
+  email: 1429030919@qq.com
+  wechat_image: https://qiniu.xiaoxinqj.fun/static/my/img/weixin.png
+  name: 小新知道
+  job: 后端开发
+  addr: 陕西西安
+  slogan: 小新知道
+  slogan_en: XIAOXINZHIDAO
+  web: https://www.xiaoxinqj.fun/
+  bilibili_url: https://space.bilibili.com/37807841
+  gitee_url: https://gitee.com/qj1204
+  github_url: https://github.com/qj1204
+upload:
+  size: 2
+  path: uploads/file
+qq:
+  app_id: 102112654
+  key: hJhrpa7PTKwKxNZX
+  redirect: https://www.xiaoxinqj.fun/login?flag=qq
+qi_niu:
+  enable: true
+  access_key: lWi_q36PtaaEnIzcOKy-yFmK1VmbOIQY_ygsOiHF
+  secret_key: LbjcW0Bdy7u11R8lIDJ72cq6kAUuWkYhaXTvNu2m
+  bucket: xiaoxinqj
+  cdn: https://qiniu.xiaoxinqj.fun/
+  zone: z2
+  prefix: gvb
+  size: 5
+email:
+  host: smtp.qq.com
+  port: 465
+  user: 1429030919@qq.com
+  password: mtzlanmdmtcwhbae
+  default_from_email: 小新
+  use_ssl: true
+  user_tls: false
+jwt:
+  secret: qj1204
+  expires: 48
+  issuer: qianjin
+redis:
+  ip: 127.0.0.1
+  port: 6379
+  password: ""
+  pool_size: 100
+  ttl: 5
+es:
+  host: http://127.0.0.1
+  port: 9200
+  user: ""
+  password: ""
+  article_index: article_index
+  full_text_index: full_text_index
+chat_group:
+  isAnonymous: true
+  isShowTime: false
+  defaultLimit: 50
+  contentLength: 101
+  welcomeTitle: 小新知道在线聊天室
+  isOnlinePeople: true
+  isSendImage: true
+  isSendFile: false
+  isMd: true
+gaode:
+  enable: true
+  key: 0d30676945160341fb0d614ef08d51ba
+big-model:
+  setting:
+    name: qwen
+    enable: true
+    order: 4
+    api-key: sk-2173f0d314cd444bbaf9bddd89d1e485
+    api-secret: ""
+    title: 小新千问
+    prompt: You are a helpful assistant.
+    slogan: 让更多人用上大模型
+  model-list:
+  - label: 通义千问
+    value: qwen
+    disabled: false
+  - label: 文心一言
+    value: wenxin
+    disabled: true
+  - label: 星火大模型
+    value: xinghuo
+    disabled: true
+  - label: 天工大模型
+    value: tiangong
+    disabled: true
+  - label: ChatGPT
+    value: ChatGPT
+    disabled: true
+  session-setting:
+    chat-scope: 2
+    session-scope: 4
+    day-scope: 100
