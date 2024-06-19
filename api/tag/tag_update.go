@@ -5,12 +5,22 @@ import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
-	"gvb_server/service/es"
+	"gvb_server/models/response"
+	"gvb_server/service/es_service"
 	"slices"
 )
 
-func (this *TagApi) TagUpdateView(c *gin.Context) {
+// TagUpdateView 更新标签
+// @Tags 标签管理
+// @Summary 更新标签
+// @Description 更新标签
+// @Param data body TagRequest  true "查询参数"
+// @Param token header string  true  "token"
+// @Param id path int  true  "id"
+// @Router /api/tags/{id} [put]
+// @Produce json
+// @Success 200 {object} response.Response{}
+func (TagApi) TagUpdateView(c *gin.Context) {
 	id := c.Param("id")
 	var cr TagRequest
 	err := c.ShouldBindJSON(&cr)
@@ -37,19 +47,19 @@ func (this *TagApi) TagUpdateView(c *gin.Context) {
 	}
 
 	// 如果标签下有文章，更新文章的标签
-	articleIDList, err := es.CommonIDListByTag(oldTagTitle)
+	articleIDList, err := es_service.CommonIDListByTag(oldTagTitle)
 	if err != nil {
 		global.Log.Error(err)
 		return
 	}
 	for _, articleID := range articleIDList {
 		// 获取文章标签
-		article, _ := es.CommonDetail(articleID)
+		article, _ := es_service.CommonDetail(articleID)
 		// 更新文章标签
 		index := slices.Index(article.Tags, oldTagTitle)
 		article.Tags[index] = cr.Title
 
-		err = es.ArticleUpdate(articleID, map[string]any{"tags": article.Tags})
+		err = es_service.ArticleUpdate(articleID, map[string]any{"tags": article.Tags})
 		if err != nil {
 			global.Log.Error(err)
 			continue

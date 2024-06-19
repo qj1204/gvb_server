@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
+	"gvb_server/models/response"
 	"gvb_server/plugins/email"
 	"gvb_server/service"
 	"gvb_server/utils/jwt"
@@ -18,7 +18,16 @@ type BindEmailRequestRedis struct {
 	// Password string  `json:"password"` // 绑定邮箱感觉不需要密码
 }
 
-func (this *UserApi) UserBindEmailViewRedis(c *gin.Context) {
+// UserBindEmailViewRedis 用户绑定邮箱
+// @Tags 用户管理
+// @Summary 用户绑定邮箱
+// @Description 用户绑定邮箱
+// @Param data body BindEmailRequest  true  "查询参数"
+// @Param token header string  true  "token"
+// @Router /api/user_bind_email [post]
+// @Produce json
+// @Success 200 {object} response.Response{}
+func (UserApi) UserBindEmailViewRedis(c *gin.Context) {
 	_claims, _ := c.Get("claims")
 	claims := _claims.(*jwt.CustomClaims)
 	token := c.Request.Header.Get("token")

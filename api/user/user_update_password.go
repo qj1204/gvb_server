@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
+	"gvb_server/models/response"
 	"gvb_server/utils/jwt"
 	"gvb_server/utils/pwd"
 )
@@ -15,7 +15,15 @@ type UpdatePasswordRequest struct {
 }
 
 // UserUpdatePassword 修改登录人的密码
-func (this *UserApi) UserUpdatePassword(c *gin.Context) {
+// @Tags 用户管理
+// @Summary 修改登录人的密码
+// @Description 修改登录人的密码
+// @Param data body UpdatePasswordRequest  true  "查询参数"
+// @Param token header string  true  "token"
+// @Router /api/user_password [put]
+// @Produce json
+// @Success 200 {object} response.Response{}
+func (UserApi) UserUpdatePassword(c *gin.Context) {
 	_claims, _ := c.Get("claims")
 	claims := _claims.(*jwt.CustomClaims)
 	var cr UpdatePasswordRequest

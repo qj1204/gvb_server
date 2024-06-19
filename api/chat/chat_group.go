@@ -8,8 +8,8 @@ import (
 	"github.com/gorilla/websocket"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/ctype"
-	"gvb_server/models/common/response"
+	"gvb_server/models/ctype"
+	"gvb_server/models/response"
 	"gvb_server/utils"
 	"net/http"
 	"strings"
@@ -38,7 +38,15 @@ type GroupResponse struct {
 	Date        time.Time     `json:"date"`         // 发送时间
 }
 
-func (this *ChatApi) ChatGroupView(c *gin.Context) {
+// ChatGroupView 群聊接口
+// @Tags 聊天管理
+// @Summary 群聊接口 websocket
+// @Description 群聊接口
+// @Param data body GroupRequest   false  "表示多个参数"
+// @Router /api/chat_groups [get]
+// @Produce json
+// @Success 200 {object} response.Response{}
+func (ChatApi) ChatGroupView(c *gin.Context) {
 	var upGrader = websocket.Upgrader{
 		CheckOrigin: func(r *http.Request) bool {
 			// 鉴权，true表示放行，false表示拦截

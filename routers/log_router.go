@@ -8,8 +8,8 @@ import (
 
 type LogRouter struct{}
 
-func (this *LogRouter) InitLogRouter(router *gin.RouterGroup) {
+func (LogRouter) InitLogRouter(router *gin.RouterGroup) {
 	apiGroup := api.ApiGroupApp.LogApiGroup
-	router.GET("log", middleware.JwtAdmin(), apiGroup.LogListView)
-	router.DELETE("log", middleware.JwtAdmin(), apiGroup.LogRemoveView)
+	router.GET("logs", middleware.JwtAdmin(), apiGroup.LogListView)
+	router.DELETE("logs", middleware.JwtAdmin(), apiGroup.LogRemoveView)
 }

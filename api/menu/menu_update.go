@@ -5,10 +5,20 @@ import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
+	"gvb_server/models/response"
 )
 
-func (this *MenuApi) MenuUpdateView(c *gin.Context) {
+// MenuUpdateView 更新菜单
+// @Tags 菜单管理
+// @Summary 更新菜单
+// @Description 更新菜单
+// @Param data body MenuRequest  true  "查询参数"
+// @Param token header string  true  "token"
+// @Param id path int  true  "id"
+// @Router /api/menus/{id} [put]
+// @Produce json
+// @Success 200 {object} response.Response{}
+func (MenuApi) MenuUpdateView(c *gin.Context) {
 	var cr MenuRequest
 	err := c.ShouldBindJSON(&cr)
 	if err != nil {

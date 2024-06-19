@@ -6,10 +6,19 @@ import (
 	"gorm.io/gorm"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
+	"gvb_server/models/response"
 )
 
-func (this *MenuApi) MenuRemoveView(c *gin.Context) {
+// MenuRemoveView 删除菜单
+// @Tags 菜单管理
+// @Summary 删除菜单
+// @Description 删除菜单
+// @Param data body models.RemoveRequest  true  "查询参数"
+// @Param token header string  true  "token"
+// @Router /api/menus [delete]
+// @Produce json
+// @Success 200 {object} response.Response{}
+func (MenuApi) MenuRemoveView(c *gin.Context) {
 	var cr models.RemoveRequest
 	err := c.ShouldBindJSON(&cr)
 	if err != nil {

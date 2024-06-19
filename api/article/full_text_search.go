@@ -7,10 +7,18 @@ import (
 	"github.com/olivere/elastic/v7"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
+	"gvb_server/models/response"
 )
 
-func (this *ArticleApi) FullTextSearchView(c *gin.Context) {
+// FullTextSearchView 全文搜索列表
+// @Tags 文章管理
+// @Summary 全文搜索列表
+// @Description 全文搜索列表
+// @Param data query models.Page   false  "表示多个参数"
+// @Router /api/articles/text [get]
+// @Produce json
+// @Success 200 {object} response.Response{data=response.ListResponse[models.FullTextModel]}
+func (ArticleApi) FullTextSearchView(c *gin.Context) {
 	var cr models.Page
 	if err := c.ShouldBindQuery(&cr); err != nil {
 		global.Log.Error(err)

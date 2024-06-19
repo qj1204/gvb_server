@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
+	"gvb_server/models/response"
 )
 
 type AdvertRequest struct {
@@ -19,17 +19,16 @@ type AdvertRequest struct {
 // @Summary 创建广告
 // @Description 创建广告
 // @Param data body AdvertRequest true "表示多个参数"
-// @Router /api/advert [post]
+// @Param token header string  true  "token"
+// @Router /api/adverts [post]
 // @Produce json
 // @Success 200 {object} response.Response{}
-func (this *AdvertApi) AdvertCreateView(c *gin.Context) {
+func (AdvertApi) AdvertCreateView(c *gin.Context) {
 	var cr AdvertRequest
-	err := c.ShouldBindJSON(&cr)
-	if err != nil {
+	if err := c.ShouldBindJSON(&cr); err != nil {
 		response.FailWithError(err, &cr, c)
 		return
 	}
-
 	// 重复广告判断
 	var advert models.AdvertModel
 	count := global.DB.Take(&advert, "title=?", cr.Title).RowsAffected
@@ -38,7 +37,7 @@ func (this *AdvertApi) AdvertCreateView(c *gin.Context) {
 		return
 	}
 
-	err = global.DB.Create(&models.AdvertModel{
+	err := global.DB.Create(&models.AdvertModel{
 		Title:  cr.Title,
 		Href:   cr.Href,
 		Image:  cr.Image,

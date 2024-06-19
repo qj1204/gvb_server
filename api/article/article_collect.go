@@ -4,14 +4,22 @@ import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
-	"gvb_server/service/es"
+	"gvb_server/models/response"
+	"gvb_server/service/es_service"
 	"gvb_server/utils/jwt"
 	"time"
 )
 
-// ArticleCollectCreateView 收藏文章或者取消收藏
-func (this *ArticleApi) ArticleCollectCreateView(c *gin.Context) {
+// ArticleCollectCreateView 用户收藏文章，或取消收藏
+// @Tags 文章管理
+// @Summary 用户收藏文章，或取消收藏
+// @Description 用户收藏文章，或取消收藏
+// @Param data body models.ESIDRequest   true  "表示多个参数"
+// @Param token header string  true  "token"
+// @Router /api/articles/collects [post]
+// @Produce json
+// @Success 200 {object} response.Response{}
+func (ArticleApi) ArticleCollectCreateView(c *gin.Context) {
 	var cr models.ESIDRequest
 	if err := c.ShouldBindJSON(&cr); err != nil {
 		response.FailWithCode(gin.ErrorTypeBind, c)
@@ -21,7 +29,7 @@ func (this *ArticleApi) ArticleCollectCreateView(c *gin.Context) {
 	_claims, _ := c.Get("claims")
 	claims := _claims.(*jwt.CustomClaims)
 
-	article, err := es.CommonDetail(cr.ID)
+	article, err := es_service.CommonDetail(cr.ID)
 	if err != nil {
 		global.Log.Error(err)
 		response.FailWithMessage("文章不存在", c)
@@ -43,7 +51,7 @@ func (this *ArticleApi) ArticleCollectCreateView(c *gin.Context) {
 		})
 	}
 	// 更新es中文章的收藏数
-	err = es.ArticleUpdate(cr.ID, map[string]any{"collects_count": article.CollectsCount + num})
+	err = es_service.ArticleUpdate(cr.ID, map[string]any{"collects_count": article.CollectsCount + num})
 	if err != nil {
 		global.Log.Error(err)
 		response.FailWithMessage("收藏数更新失败", c)

@@ -1,10 +1,10 @@
 mysql:
     host: 127.0.0.1
     port: 3306
-    config: "charset=utf8mb4&parseTime=True&loc=Local"
+    config: charset=utf8mb4&parseTime=True&loc=Local
     db: gvb_db
     user: root
-    password: "123456"
+    password: 123456
 logger_setting:
     level: info
     prefix: gvb
@@ -14,38 +14,31 @@ logger_setting:
 system:
     host: 127.0.0.1
     port: 8080
-    env: release
-upload:
-    size: 2
-    path: static/uploads
+    env: debug
 site_info:
-    created_at: "2023-12-18"
+    created_at: 2023-12-18
     bei_an: 陕ICP备2023003838号-1
-    title: qj的个人博客
-    qq_image: https://qiniu.xiaoxinqj.top/static/my/img/qq.jpg
+    title: 小新的个人博客
+    qq_image: https://qiniu.xiaoxinqj.top/static/my/img/qq.png
     version: 1.0.0
     email: 1429030919@qq.com
-    wechat_image: https://qiniu.xiaoxinqj.top/static/my/img/weixin.jpg
-    name: 小新qj
+    wechat_image: https://qiniu.xiaoxinqj.top/static/my/img/weixin.png
+    name: 小新
     job: 后端开发工程师
     addr: 陕西西安
-    slogan: 一切皆有可能
-    slogan_en: Everything is possible
-    web: http://blog.xiaoxinqj.top
+    slogan: 小新知道
+    slogan_en: XIAOXINZHIDAO
+    web: http://blog.xiaoxinqj.fun
     bilibili: https://space.bilibili.com/37807841
+    gitee: https://gitee.com/qj1204
     github: https://github.com/qj1204
-email:
-    host: smtp.qq.com
-    port: 465
-    user: 1429030919@qq.com
-    password: "mtzlanmdmtcwhbae"
-    default_from_email: 小新
-    use_ssl: true
-    user_tls: false
+upload:
+    size: 2
+    path: static/uploads/file
 qq:
     app_id: xx
     key: xx
-    redirect: http://blog.xiaoxinqj.top/login?flag=qq
+    redirect: http://blog.xiaoxinqj.fun/login?flag=qq
 qi_niu:
     enable: true
     access_key: lWi_q36PtaaEnIzcOKy-yFmK1VmbOIQY_ygsOiHF
@@ -53,20 +46,73 @@ qi_niu:
     bucket: xiaoxinqj
     cdn: http://qiniu.xiaoxinqj.top/
     zone: z2
-    prefix: "gvb"
+    prefix: gvb
     size: 5
+email:
+    host: smtp.qq.com
+    port: 465
+    user: 1429030919@qq.com
+    password: mtzlanmdmtcwhbae"
+    default_from_email: 小新
+    use_ssl: true
+    user_tls: false
 jwt:
     secret: qj1204
     expires: 48
-    issuer: "qianjin"
+    issuer: qianjin
 redis:
     ip: 127.0.0.1
     port: 6379
-    password:
+    password: ""
     pool_size: 100
     ttl: 5
 es:
-    host: "http://127.0.0.1"
+    host: http://127.0.0.1
     port: 9200
-    user:
-    password:
+    user: ""
+    password: ""
+    article_index: article_index
+    full_text_index: full_text_index
+chat_group:
+    isAnonymous: true
+    isShowTime: false
+    defaultLimit: 50
+    contentLength: 101
+    welcomeTitle: 小新知道在线聊天室
+    isOnlinePeople: true
+    isSendImage: true
+    isSendFile: false
+    isMd: true
+gaode:
+    enable: true
+    key: "0d30676945160341fb0d614ef08d51ba"
+big-model:
+    setting:
+        name: qwen
+        enable: true
+        order: 4
+        api-key: sk-2173f0d314cd444bbaf9bddd89d1e485
+        api-secret: ""
+        title: 小新千问
+        prompt: 你是一个大预言模型
+        slogan: 让更多人用上大模型
+    model-list:
+        - label: 通义千问
+          value: qwen
+          disabled: false
+        - label: 文心一言
+          value: wenxin
+          disabled: true
+        - label: 星火大模型
+          value: xinghuo
+          disabled: true
+        - label: 天工大模型
+          value: tiangong
+          disabled: true
+        - label: ChatGPT
+          value: ChatGPT
+          disabled: true
+    session-setting:
+        chat-scope: 2
+        session-scope: 4
+        day-scope: 100

@@ -7,7 +7,7 @@ import (
 	"gvb_server/core"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/service/redis"
+	"gvb_server/service/redis_service"
 )
 
 func main() {
@@ -26,7 +26,7 @@ func main() {
 		return
 	}
 
-	diggInfo := redis.NewArticleDiggCount().GetInfo()
+	diggInfo := redis_service.NewArticleDiggCount().GetInfo()
 
 	for _, hit := range res.Hits.Hits {
 		var article models.ArticleModel
@@ -51,5 +51,5 @@ func main() {
 	}
 
 	global.Log.Info("更新索引成功")
-	redis.NewArticleDiggCount().Clear()
+	redis_service.NewArticleDiggCount().Clear()
 }

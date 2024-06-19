@@ -8,9 +8,9 @@ import (
 	"github.com/russross/blackfriday"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/ctype"
-	"gvb_server/models/common/response"
-	"gvb_server/service/es"
+	"gvb_server/models/ctype"
+	"gvb_server/models/response"
+	"gvb_server/service/es_service"
 	"gvb_server/utils/jwt"
 	"gvb_server/utils/random"
 	"strings"
@@ -28,7 +28,16 @@ type ArticleRequest struct {
 	Tags     ctype.Array `json:"tags"`                                    // 文章标签
 }
 
-func (this *ArticleApi) ArticleCreateView(c *gin.Context) {
+// ArticleCreateView 发布文章
+// @Tags 文章管理
+// @Summary 发布文章
+// @Description 发布文章
+// @Param data body ArticleRequest   true  "表示多个参数"
+// @Param token header string  true  "token"
+// @Router /api/articles [post]
+// @Produce json
+// @Success 200 {object} response.Response{}
+func (ArticleApi) ArticleCreateView(c *gin.Context) {
 	_claims, _ := c.Get("claims")
 	claims := _claims.(*jwt.CustomClaims)
 	var cr ArticleRequest
@@ -39,7 +48,7 @@ func (this *ArticleApi) ArticleCreateView(c *gin.Context) {
 	}
 
 	// 判断标题是否重复
-	_, err = es.CommonDetailByKeyword(cr.Title)
+	_, err = es_service.CommonDetailByKeyword(cr.Title)
 	if err == nil {
 		response.FailWithMessage("文章已存在", c)
 		return
@@ -124,6 +133,6 @@ func (this *ArticleApi) ArticleCreateView(c *gin.Context) {
 	}
 
 	// 同步文章数据到全文搜索索引
-	go es.AsyncArticleByFullText(article.ID, article.Title, article.Content)
+	go es_service.AsyncArticleByFullText(article.ID, article.Title, article.Content)
 	response.OkWithMessage("文章发布成功", c)
 }

@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
+	"gvb_server/models/response"
 )
 
 type ImageUpdateRequest struct {
@@ -12,7 +12,16 @@ type ImageUpdateRequest struct {
 	Name string `json:"name" binding:"required" msg:"请输入文件名"`
 }
 
-func (this *ImageApi) ImageUpdateView(c *gin.Context) {
+// ImageUpdateView 图片更新
+// @Tags 图片管理
+// @Summary 图片更新
+// @Description 图片更新
+// @Param token header string  true  "token"
+// @Param data body ImageUpdateRequest   true  "表示多个参数"
+// @Router /api/images [put]
+// @Produce json
+// @Success 200 {object} response.Response{}
+func (ImageApi) ImageUpdateView(c *gin.Context) {
 	var cr ImageUpdateRequest
 	err := c.ShouldBindJSON(&cr)
 	if err != nil {

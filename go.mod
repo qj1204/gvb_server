@@ -1,6 +1,6 @@
 module gvb_server
 
-go 1.21.1
+go 1.22
 
 require (
 	github.com/JohannesKaufmann/html-to-markdown v1.5.0

@@ -6,7 +6,7 @@ import (
 	"gvb_server/flag"
 	"gvb_server/global"
 	"gvb_server/routers"
-	"gvb_server/service/cron"
+	"gvb_server/service/cron_service"
 	"gvb_server/utils"
 )
 
@@ -26,23 +26,22 @@ func main() {
 	core.InitAddrDB()
 	defer global.AddrDB.Close()
 
-	// 命令行参数绑定（在连接数据库之后，链接路由之前）
-	option := flag.Parse()
-	if flag.IsWebStop(option) {
-		// 如果是停止web服务，则执行相应的操作
-		flag.SwitchOption(option)
-		return
-	}
-
 	// 连接redis
 	global.Redis = core.ConnectRedis()
 	// 连接es
 	global.ESClient = core.EsConnect()
+
+	// 命令行参数绑定（在连接数据库之后，链接路由之前）
+	option := flag.Parse()
+	if option.Run() {
+		return
+	}
+
 	// 初始化定时任务
-	cron.CronInit()
+	cron_service.CronInit()
 
 	addr := global.Config.System.GetAddr()
-	utils.PrintSystem(addr)
+	utils.PrintSystem()
 
 	err := routers.InitRouter().Run(addr)
 	if err != nil {

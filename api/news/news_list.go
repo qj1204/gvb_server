@@ -5,29 +5,28 @@ import (
 	"fmt"
 	"github.com/fatih/structs"
 	"github.com/gin-gonic/gin"
-	"gvb_server/models"
-	"gvb_server/models/common/response"
-	"gvb_server/service/redis"
+	"gvb_server/models/response"
+	"gvb_server/service/redis_service"
 	"gvb_server/utils/request"
 	"io"
 	"time"
 )
 
-type Params struct {
+type params struct {
 	ID   string `json:"id"`
 	Size int    `json:"size"`
 }
 
-type Header struct {
+type header struct {
 	Signaturekey string `form:"signaturekey" structs:"signature"`
 	Version      string `form:"version" structs:"version"`
 	UserAgent    string `form:"User-Agent" structs:"User-Agent"`
 }
 
 type NewsResponse struct {
-	Code int               `json:"code"`
-	Data []models.NewsData `json:"data"`
-	Msg  string            `json:"msg"`
+	Code int                      `json:"code"`
+	Data []redis_service.NewsData `json:"data"`
+	Msg  string                   `json:"msg"`
 }
 
 const (
@@ -35,25 +34,36 @@ const (
 	timeout = 2 * time.Second
 )
 
-func (api *NewsApi) NewsListView(c *gin.Context) {
-	var params Params
-	var header Header
+// NewsListView 新闻列表
+// @Tags 新闻管理
+// @Summary 新闻列表
+// @Description 新闻列表
+// @Param data body params true "新闻参数"
+// @Param version header string true "version"
+// @Param User-Agent header string true "User-Agent"
+// @Param signaturekey header string true "signaturekey"
+// @Router /api/news [post]
+// @Produce json
+// @Success 200 {object} response.Response{data=[]redis_service.NewsData}
+func (NewsApi) NewsListView(c *gin.Context) {
+	var cr params
+	var headers header
 
-	err := c.ShouldBindJSON(&params)
-	err = c.ShouldBindHeader(&header)
+	err := c.ShouldBindJSON(&cr)
+	err = c.ShouldBindHeader(&headers)
 	if err != nil {
 		response.FailWithCode(gin.ErrorTypeBind, c)
 		return
 	}
 
-	key := fmt.Sprintf("%s_%d", params.ID, params.Size)
-	newsData, _ := redis.GetNews(key)
+	key := fmt.Sprintf("%s_%d", cr.ID, cr.Size)
+	newsData, _ := redis_service.GetNews(key)
 	if len(newsData) != 0 {
 		response.OkWithData(newsData, c)
 		return
 	}
 
-	httpRes, err := request.Post(newsApi, params, structs.Map(header), timeout)
+	httpRes, err := request.Post(newsApi, cr, structs.Map(headers), timeout)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
@@ -71,7 +81,7 @@ func (api *NewsApi) NewsListView(c *gin.Context) {
 		return
 	}
 
-	redis.SetNews(key, newsResponse.Data)
+	redis_service.SetNews(key, newsResponse.Data)
 
 	response.OkWithData(newsResponse.Data, c)
 }

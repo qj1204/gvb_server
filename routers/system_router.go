@@ -3,12 +3,16 @@ package routers
 import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/api"
+	"gvb_server/middleware"
 )
 
 type SystemRouter struct{}
 
-func (this *SystemRouter) InitSystemRouter(router *gin.RouterGroup) {
+func (SystemRouter) InitSystemRouter(router *gin.RouterGroup) {
 	apiGroup := api.ApiGroupApp.SystemApiGroup
-	router.GET("/system/:name", apiGroup.SystemInfoView)
-	router.PUT("/system/:name", apiGroup.SystemInfoUpdateView)
+	router.GET("systems/:name", apiGroup.SystemInfoView)
+	router.PUT("systems/:name", middleware.JwtAdmin(), apiGroup.SystemInfoUpdateView)
+
+	router.GET("systems/site", apiGroup.SiteInfoView)
+	router.PUT("systems/site", middleware.JwtAdmin(), apiGroup.SiteUpdateView)
 }

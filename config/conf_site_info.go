@@ -15,5 +15,6 @@ type SiteInfo struct {
 	SloganEn    string `yaml:"slogan_en" json:"slogan_en"`
 	Web         string `yaml:"web" json:"web"`
 	Bilibili    string `yaml:"bilibili" json:"bilibili"`
+	Gitee       string `yaml:"gitee" json:"gitee"`
 	Github      string `yaml:"github" json:"github"`
 }

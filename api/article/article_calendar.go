@@ -7,7 +7,7 @@ import (
 	"github.com/olivere/elastic/v7"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
+	"gvb_server/models/response"
 	"time"
 )
 
@@ -26,7 +26,14 @@ type BucketsType struct {
 
 var DateCount = make(map[string]int)
 
-func (this *ArticleApi) ArticleCalendarView(c *gin.Context) {
+// ArticleCalendarView 文章日历
+// @Tags 文章管理
+// @Summary 文章日历
+// @Description 文章日历
+// @Router /api/articles/calendar [get]
+// @Produce json
+// @Success 200 {object} response.Response{data=[]CalendarResponse}
+func (ArticleApi) ArticleCalendarView(c *gin.Context) {
 	// 时间聚合
 	agg := elastic.NewDateHistogramAggregation().Field("created_at").CalendarInterval("day")
 

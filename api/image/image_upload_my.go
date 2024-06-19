@@ -5,19 +5,28 @@ import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/ctype"
-	"gvb_server/models/common/response"
+	"gvb_server/models/ctype"
+	"gvb_server/models/response"
 	"gvb_server/plugins/qiniu"
 	"gvb_server/service"
-	"gvb_server/service/image"
+	"gvb_server/service/image_service"
 	"gvb_server/utils"
 	"path"
 	"strings"
 	"time"
 )
 
-// ImageUploadViewMy 上传图片
-func (this *ImageApi) ImageUploadViewMy(c *gin.Context) {
+// ImageUploadViewMy 上传多个图片，返回图片的url
+// @Tags 图片管理
+// @Summary 上传多个图片，返回图片的url
+// @Description 上传多个图片，返回图片的url
+// @Param token header string  true  "token"
+// @Accept multipart/form-data
+// @Param images formData file true "文件上传"
+// @Router /api/images [post]
+// @Produce json
+// @Success 200 {object} response.Response{}
+func (ImageApi) ImageUploadViewMy(c *gin.Context) {
 	form, err := c.MultipartForm()
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -29,12 +38,12 @@ func (this *ImageApi) ImageUploadViewMy(c *gin.Context) {
 		return
 	}
 
-	var resList []image.FileUploadResponse
+	var resList []image_service.FileUploadResponse
 
 	for _, fileHeader := range fileHeaderList {
 		fileName := fileHeader.Filename
 
-		res := image.FileUploadResponse{
+		res := image_service.FileUploadResponse{
 			FileName:  fileName,
 			IsSuccess: false,
 			Msg:       "图片上传失败",
@@ -42,7 +51,7 @@ func (this *ImageApi) ImageUploadViewMy(c *gin.Context) {
 
 		// 判断图片后缀是否在白名单中
 		suffix := strings.ToLower(path.Ext(fileName)[1:])
-		if !utils.InList(suffix, image.WhiteImageList) {
+		if !utils.InList(suffix, image_service.WhiteImageList) {
 			res.Msg = "非法文件后缀"
 			resList = append(resList, res)
 			continue

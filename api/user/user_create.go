@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
-	"gvb_server/models/common/ctype"
-	"gvb_server/models/common/response"
+	"gvb_server/models/ctype"
+	"gvb_server/models/response"
 	"gvb_server/service"
 )
 
@@ -16,7 +16,16 @@ type UserCreateRequest struct {
 	Role     ctype.Role `json:"role" binding:"required" msg:"请选择权限"`
 }
 
-func (this *UserApi) UserCreateView(c *gin.Context) {
+// UserCreateView 创建用户
+// @Tags 用户管理
+// @Summary 创建用户
+// @Description 创建用户
+// @Param data body UserCreateRequest  true  "查询参数"
+// @Param token header string  true  "token"
+// @Router /api/users [post]
+// @Produce json
+// @Success 200 {object} response.Response{}
+func (UserApi) UserCreateView(c *gin.Context) {
 	var cr UserCreateRequest
 	if err := c.ShouldBindJSON(&cr); err != nil {
 		response.FailWithError(err, &cr, c)

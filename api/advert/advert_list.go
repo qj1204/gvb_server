@@ -3,8 +3,8 @@ package advert
 import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
-	"gvb_server/service/common"
+	"gvb_server/models/response"
+	"gvb_server/service/common_service"
 	"strings"
 )
 
@@ -13,29 +13,28 @@ import (
 // @Summary 广告列表
 // @Description 广告列表
 // @Param data query models.Page false "查询参数"
-// @Router /api/advert [get]
+// @Router /api/adverts [get]
 // @Produce json
 // @Success 200 {object} response.Response{data=response.ListResponse[models.AdvertModel]}
-func (this *AdvertApi) AdvertListView(c *gin.Context) {
+func (AdvertApi) AdvertListView(c *gin.Context) {
 	var cr models.Page
-	err := c.ShouldBindQuery(&cr)
-	if err != nil {
+	if err := c.ShouldBindQuery(&cr); err != nil {
 		response.FailWithCode(gin.ErrorTypeBind, c)
 		return
 	}
 
-	// 判断请求头的Referer是否包含admin，如果包含，就返回所有广告；不是，就返回is_show=true的广告
-	referer := c.GetHeader("Referer")
+	// 判断请求头的Gvb_referer是否包含admin，如果包含，就返回所有广告；不是，就返回is_show=true的广告
+	referer := c.GetHeader("Gvb_referer")
 	isShow := true
 	if strings.Contains(referer, "admin") {
+		// admin来的
 		isShow = false
 	}
 
-	// 判断Referer是否包含admin，如果包含，就全部返回；不是，就返回is_show=true的
-	adverList, count, _ := common.CommonList(models.AdvertModel{IsShow: isShow}, common.Option{
+	advertList, count, _ := common_service.CommonList(models.AdvertModel{IsShow: isShow}, common_service.Option{
 		Page:  cr,
 		Debug: true,
 	})
 
-	response.OkWithList(adverList, count, c)
+	response.OkWithList(advertList, count, c)
 }

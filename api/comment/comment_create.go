@@ -5,9 +5,9 @@ import (
 	"gorm.io/gorm"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
-	"gvb_server/service/es"
-	"gvb_server/service/redis"
+	"gvb_server/models/response"
+	"gvb_server/service/es_service"
+	"gvb_server/service/redis_service"
 	"gvb_server/utils/jwt"
 )
 
@@ -17,7 +17,16 @@ type CommentRequest struct {
 	ParentCommentID *uint  `json:"parent_comment_id"` // 父评论ID
 }
 
-func (this *CommentApi) CommentCreateView(c *gin.Context) {
+// CommentCreateView 发布评论
+// @Tags 评论管理
+// @Summary 发布评论
+// @Description 发布评论
+// @Param data body CommentRequest   true  "表示多个参数"
+// @Param token header string  true  "token"
+// @Router /api/comments [post]
+// @Produce json
+// @Success 200 {object} response.Response{}
+func (CommentApi) CommentCreateView(c *gin.Context) {
 	var cr CommentRequest
 	if err := c.ShouldBindJSON(&cr); err != nil {
 		response.FailWithError(err, &cr, c)
@@ -27,7 +36,7 @@ func (this *CommentApi) CommentCreateView(c *gin.Context) {
 	claims := _claims.(*jwt.CustomClaims)
 
 	// 文章是否存在
-	_, err := es.CommonDetail(cr.ArticleID)
+	_, err := es_service.CommonDetail(cr.ArticleID)
 	if err != nil {
 		global.Log.Error(err)
 		response.FailWithMessage("文章不存在", c)
@@ -60,7 +69,7 @@ func (this *CommentApi) CommentCreateView(c *gin.Context) {
 	})
 
 	// 拿到文章评论数，新的评论数存到redis
-	redis.NewArticleCommentCount().Set(cr.ArticleID)
+	redis_service.NewArticleCommentCount().Set(cr.ArticleID)
 
 	response.OkWithMessage("评论成功", c)
 }

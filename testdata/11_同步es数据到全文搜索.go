@@ -7,7 +7,6 @@ import (
 	"gvb_server/core"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/service/es"
 )
 
 func main() {

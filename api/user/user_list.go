@@ -3,14 +3,23 @@ package user
 import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/models"
-	"gvb_server/models/common/ctype"
-	"gvb_server/models/common/response"
-	"gvb_server/service/common"
+	"gvb_server/models/ctype"
+	"gvb_server/models/response"
+	"gvb_server/service/common_service"
 	"gvb_server/utils/desens"
 	"gvb_server/utils/jwt"
 )
 
-func (this *UserApi) UserListView(c *gin.Context) {
+// UserListView 用户列表
+// @Tags 用户管理
+// @Summary 用户列表
+// @Description 用户列表
+// @Param data query models.Page  false  "查询参数"
+// @Param token header string  true  "token"
+// @Router /api/users [get]
+// @Produce json
+// @Success 200 {object} response.Response{data=response.ListResponse[models.UserModel]}
+func (UserApi) UserListView(c *gin.Context) {
 	_claims, _ := c.Get("claims")
 	claims := _claims.(*jwt.CustomClaims)
 	var page models.Page
@@ -19,7 +28,7 @@ func (this *UserApi) UserListView(c *gin.Context) {
 		return
 	}
 	var users []models.UserModel
-	list, count, _ := common.CommonList(models.UserModel{}, common.Option{
+	list, count, _ := common_service.CommonList(models.UserModel{}, common_service.Option{
 		Page:  page,
 		Debug: true,
 	})

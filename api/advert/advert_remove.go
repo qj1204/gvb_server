@@ -5,18 +5,19 @@ import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
+	"gvb_server/models/response"
 )
 
-// AdvertRemoveView 删除广告
+// AdvertRemoveView 批量删除广告
 // @Tags 广告管理
-// @Summary 删除广告
-// @Description 删除广告
+// @Summary 批量删除广告
+// @Description 批量删除广告
 // @Param data body models.RemoveRequest true "广告id列表"
-// @Router /api/advert [delete]
+// @Param token header string  true  "token"
+// @Router /api/adverts [delete]
 // @Produce json
 // @Success 200 {object} response.Response{data=string}
-func (this *AdvertApi) AdvertRemoveView(c *gin.Context) {
+func (AdvertApi) AdvertRemoveView(c *gin.Context) {
 	var cr models.RemoveRequest
 	err := c.ShouldBindJSON(&cr)
 	if err != nil {

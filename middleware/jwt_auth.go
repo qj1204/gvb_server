@@ -2,9 +2,9 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
-	"gvb_server/models/common/ctype"
-	"gvb_server/models/common/response"
-	"gvb_server/service/redis"
+	"gvb_server/models/ctype"
+	"gvb_server/models/response"
+	"gvb_server/service/redis_service"
 	"gvb_server/utils/jwt"
 )
 
@@ -24,7 +24,7 @@ func JwtAuth() gin.HandlerFunc {
 			return
 		}
 		// 判断是否在redis中
-		if redis.CheckLogout(token) {
+		if redis_service.CheckLogout(token) {
 			response.FailWithMessage("token已失效", c)
 			c.Abort()
 			return
@@ -50,7 +50,7 @@ func JwtAdmin() gin.HandlerFunc {
 			return
 		}
 		// 判断是否在redis中
-		if redis.CheckLogout(token) {
+		if redis_service.CheckLogout(token) {
 			response.FailWithMessage("token已失效", c)
 			c.Abort()
 			return

@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/ctype"
-	"gvb_server/models/common/response"
+	"gvb_server/models/ctype"
+	"gvb_server/models/response"
 )
 
 type UserRole struct {
@@ -14,7 +14,16 @@ type UserRole struct {
 	Role     ctype.Role `json:"role" binding:"required,oneof=1 2 3 4" msg:"权限参数错误"`
 }
 
-func (this *UserApi) UserUpdataRoleView(c *gin.Context) {
+// UserUpdateRoleView 用户权限变更
+// @Tags 用户管理
+// @Summary 用户权限变更
+// @Description 用户权限变更
+// @Param token header string  true  "token"
+// @Param data body UserRole  true  "查询参数"
+// @Router /api/user_role [put]
+// @Produce json
+// @Success 200 {object} response.Response{}
+func (UserApi) UserUpdateRoleView(c *gin.Context) {
 	var cr UserRole
 	if err := c.ShouldBindJSON(&cr); err != nil {
 		response.FailWithError(err, &cr, c)

@@ -8,8 +8,8 @@ import (
 
 type DataRouter struct{}
 
-func (this *DataRouter) InitDataRouter(router *gin.RouterGroup) {
-	apiGroup := api.ApiGroupApp.DataApi
-	router.GET("/seven_login", middleware.JwtAdmin(), apiGroup.SevenLoginView)
-	router.GET("/data_sum", middleware.JwtAdmin(), apiGroup.DataSumView)
+func (DataRouter) InitDataRouter(router *gin.RouterGroup) {
+	apiGroup := api.ApiGroupApp.DataApiGroup
+	router.GET("data_login", middleware.JwtAdmin(), apiGroup.DataLoginView)
+	router.GET("data_sum", middleware.JwtAdmin(), apiGroup.DataSumView)
 }

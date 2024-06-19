@@ -3,14 +3,15 @@ package routers
 import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/api"
+	"gvb_server/middleware"
 )
 
 type AdvertRouter struct{}
 
-func (this *AdvertRouter) InitAdvertRouter(router *gin.RouterGroup) {
+func (AdvertRouter) InitAdvertRouter(router *gin.RouterGroup) {
 	apiGroup := api.ApiGroupApp.AdvertApiGroup
-	router.POST("/advert", apiGroup.AdvertCreateView)
-	router.GET("/advert", apiGroup.AdvertListView)
-	router.PUT("/advert/:id", apiGroup.AdvertUpdateView)
-	router.DELETE("/advert", apiGroup.AdvertRemoveView)
+	router.POST("adverts", middleware.JwtAdmin(), apiGroup.AdvertCreateView)
+	router.GET("adverts", apiGroup.AdvertListView)
+	router.PUT("adverts/:id", middleware.JwtAdmin(), apiGroup.AdvertUpdateView)
+	router.DELETE("adverts", middleware.JwtAdmin(), apiGroup.AdvertRemoveView)
 }

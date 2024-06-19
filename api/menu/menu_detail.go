@@ -4,10 +4,18 @@ import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
+	"gvb_server/models/response"
 )
 
-func (this *MenuApi) MenuDetailView(c *gin.Context) {
+// MenuDetailView 菜单详情
+// @Tags 菜单管理
+// @Summary 菜单详情
+// @Description 菜单详情
+// @Param id path int  true  "id"
+// @Router /api/menus/{id} [get]
+// @Produce json
+// @Success 200 {object} response.Response{data=MenuResponse}
+func (MenuApi) MenuDetailView(c *gin.Context) {
 	id := c.Param("id")
 	// 先查菜单
 	var menuModel models.MenuModel

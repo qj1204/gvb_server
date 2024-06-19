@@ -5,9 +5,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/ctype"
-	"gvb_server/models/common/response"
-	"gvb_server/service/es"
+	"gvb_server/models/ctype"
+	"gvb_server/models/response"
+	"gvb_server/service/es_service"
 	"time"
 )
 
@@ -23,7 +23,16 @@ type ArticleUpdateRequest struct {
 	Tags     ctype.Array `json:"tags"`      // 文章标签
 }
 
-func (this *ArticleApi) ArticleUpdateView(c *gin.Context) {
+// ArticleUpdateView 文章更新
+// @Tags 文章管理
+// @Summary 文章更新
+// @Description 文章更新
+// @Param data body ArticleUpdateRequest   false  "传什么参数更新什么，不传不更"
+// @Param token header string  true  "token"
+// @Router /api/articles [put]
+// @Produce json
+// @Success 200 {object} response.Response{}
+func (ArticleApi) ArticleUpdateView(c *gin.Context) {
 	var cr ArticleUpdateRequest
 	err := c.ShouldBindJSON(&cr)
 	if err != nil {
@@ -33,7 +42,7 @@ func (this *ArticleApi) ArticleUpdateView(c *gin.Context) {
 	}
 
 	// 判断文章是否存在
-	oldArticle, err := es.CommonDetail(cr.ID)
+	oldArticle, err := es_service.CommonDetail(cr.ID)
 	if err != nil {
 		global.Log.Error(err)
 		response.FailWithMessage("文章不存在", c)
@@ -88,7 +97,7 @@ func (this *ArticleApi) ArticleUpdateView(c *gin.Context) {
 		}
 	}
 
-	err = es.ArticleUpdate(cr.ID, maps)
+	err = es_service.ArticleUpdate(cr.ID, maps)
 	if err != nil {
 		global.Log.Error(err)
 		response.FailWithMessage("文章更新失败", c)
@@ -96,10 +105,10 @@ func (this *ArticleApi) ArticleUpdateView(c *gin.Context) {
 	}
 
 	// 更新全文搜索
-	newArticle, _ := es.CommonDetail(cr.ID)
+	newArticle, _ := es_service.CommonDetail(cr.ID)
 	if oldArticle.Title != newArticle.Title || oldArticle.Content != newArticle.Content {
-		go es.DeleteFullTextByArticleID(cr.ID)
-		go es.AsyncArticleByFullText(cr.ID, newArticle.Title, newArticle.Content)
+		go es_service.DeleteFullTextByArticleID(cr.ID)
+		go es_service.AsyncArticleByFullText(cr.ID, newArticle.Title, newArticle.Content)
 	}
 	response.OkWithMessage("文章更新成功", c)
 }

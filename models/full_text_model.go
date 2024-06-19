@@ -46,29 +46,6 @@ func (this FullTextModel) IndexExists() bool {
 	return exists
 }
 
-// CreateIndex 创建索引
-func (this FullTextModel) CreateIndex() error {
-	if this.IndexExists() {
-		// 索引已经存在，删除索引
-		this.RemoveIndex()
-	}
-	// 没有索引，创建索引
-	createIndex, err := global.ESClient.
-		CreateIndex(this.Index()).
-		BodyString(this.Mapping()).
-		Do(context.Background())
-	if err != nil {
-		global.Log.Errorf("创建索引失败, %s", err.Error())
-		return err
-	}
-	if !createIndex.Acknowledged {
-		global.Log.Errorf("创建索引失败, %s", err.Error())
-		return err
-	}
-	global.Log.Infof("%s 创建索引成功", this.Index())
-	return nil
-}
-
 // RemoveIndex 删除索引
 func (this FullTextModel) RemoveIndex() error {
 	global.Log.Info("索引存在，删除索引")

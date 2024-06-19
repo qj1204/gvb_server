@@ -3,8 +3,13 @@ package models
 import (
 	"context"
 	"gvb_server/global"
-	"gvb_server/models/common/ctype"
+	"gvb_server/models/ctype"
 )
+
+type ESIndexInterFace interface {
+	Index() string
+	Mapping() string
+}
 
 // ArticleModel 文章表
 type ArticleModel struct {
@@ -38,11 +43,11 @@ type ArticleModel struct {
 	Tags ctype.Array `json:"tags" structs:"tags"` // 文章标签
 }
 
-func (this ArticleModel) Index() string {
-	return "article_index"
+func (ArticleModel) Index() string {
+	return global.Config.ES.ArticleIndex
 }
 
-func (this ArticleModel) Mapping() string { // keyword类型不会被分词（用于精确匹配），text类型会被分词
+func (ArticleModel) Mapping() string { // keyword类型不会被分词（用于精确匹配），text类型会被分词
 	return `{
 	"settings": {
 		"index": {
@@ -92,29 +97,6 @@ func (this ArticleModel) IndexExists() bool {
 		global.Log.Error(err.Error())
 	}
 	return exists
-}
-
-// CreateIndex 创建索引
-func (this ArticleModel) CreateIndex() error {
-	if this.IndexExists() {
-		// 索引已经存在，删除索引
-		this.RemoveIndex()
-	}
-	// 没有索引，创建索引
-	createIndex, err := global.ESClient.
-		CreateIndex(this.Index()).
-		BodyString(this.Mapping()).
-		Do(context.Background())
-	if err != nil {
-		global.Log.Errorf("创建索引失败, %s", err.Error())
-		return err
-	}
-	if !createIndex.Acknowledged {
-		global.Log.Errorf("创建索引失败, %s", err.Error())
-		return err
-	}
-	global.Log.Infof("%s 创建索引成功", this.Index())
-	return nil
 }
 
 // RemoveIndex 删除索引

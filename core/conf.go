@@ -38,5 +38,6 @@ func SetYaml() error {
 	if err != nil {
 		return err
 	}
+	global.Log.Info("配置文件修改成功")
 	return nil
 }

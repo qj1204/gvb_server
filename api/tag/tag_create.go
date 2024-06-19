@@ -4,14 +4,23 @@ import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
+	"gvb_server/models/response"
 )
 
 type TagRequest struct {
 	Title string `json:"title" binding:"required" msg:"请输入标签内容" structs:"title"` // 广告标题
 }
 
-func (this *TagApi) TagCreateView(c *gin.Context) {
+// TagCreateView 发布标签
+// @Tags 标签管理
+// @Summary 发布标签
+// @Description 发布标签
+// @Param data body TagRequest  true  "查询参数"
+// @Param token header string  true  "token"
+// @Router /api/tags [post]
+// @Produce json
+// @Success 200 {object} response.Response{}
+func (TagApi) TagCreateView(c *gin.Context) {
 	var cr TagRequest
 	err := c.ShouldBindJSON(&cr)
 	if err != nil {

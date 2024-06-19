@@ -4,14 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/sirupsen/logrus"
-	"gvb_server/models/common/response"
+	"gvb_server/models/response"
 	"os"
 	"testing"
 )
 
 // 如果错误码是以json格式存储在文件中，可以使用以下方法读取
 
-const FILE = "models/common/response/err_code.json"
+const FILE = "models/response/err_code.json"
 
 type ErrorMap map[response.ErrCode]string
 

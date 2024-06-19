@@ -8,12 +8,21 @@ import (
 	"github.com/olivere/elastic/v7"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
-	"gvb_server/service/es"
+	"gvb_server/models/response"
+	"gvb_server/service/es_service"
 	"gvb_server/utils/jwt"
 )
 
-func (this *ArticleApi) ArticleCollectRemoveView(c *gin.Context) {
+// ArticleCollectRemoveView 用户取消收藏文章
+// @Tags 文章管理
+// @Summary 用户取消收藏文章
+// @Description 用户取消收藏文章
+// @Param data body models.ESIDListRequest   true  "表示多个参数"
+// @Param token header string  true  "token"
+// @Router /api/articles/collects [delete]
+// @Produce json
+// @Success 200 {object} response.Response{}
+func (ArticleApi) ArticleCollectRemoveView(c *gin.Context) {
 	var cr models.ESIDListRequest
 	if err := c.ShouldBindJSON(&cr); err != nil {
 		response.FailWithCode(gin.ErrorTypeBind, c)
@@ -58,7 +67,7 @@ func (this *ArticleApi) ArticleCollectRemoveView(c *gin.Context) {
 			response.FailWithMessage("查询失败", c)
 			return
 		}
-		err = es.ArticleUpdate(hit.Id, map[string]any{"collects_count": article.CollectsCount - 1})
+		err = es_service.ArticleUpdate(hit.Id, map[string]any{"collects_count": article.CollectsCount - 1})
 		if err != nil {
 			global.Log.Error(err)
 			response.FailWithMessage("更新失败", c)

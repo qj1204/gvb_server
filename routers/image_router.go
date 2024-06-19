@@ -3,15 +3,17 @@ package routers
 import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/api"
+	"gvb_server/middleware"
 )
 
 type ImageRouter struct{}
 
-func (this *ImageRouter) InitImageRouter(router *gin.RouterGroup) {
+func (ImageRouter) InitImageRouter(router *gin.RouterGroup) {
 	apiGroup := api.ApiGroupApp.ImageApiGroup
-	router.POST("/image", apiGroup.ImageUploadViewMy)
-	router.GET("/image", apiGroup.ImageListView)
-	router.DELETE("/image", apiGroup.ImageRemoveView)
-	router.PUT("/image", apiGroup.ImageUpdateView)
-	router.GET("/image_name", apiGroup.ImageNameListView)
+	router.GET("images", apiGroup.ImageListView)
+	router.GET("image_names", apiGroup.ImageNameListView)
+	router.POST("images", middleware.JwtAuth(), apiGroup.ImageUploadViewMy)
+	router.POST("image", middleware.JwtAuth(), apiGroup.ImageUploadDataView)
+	router.DELETE("images", middleware.JwtAdmin(), apiGroup.ImageRemoveView)
+	router.PUT("images", middleware.JwtAdmin(), apiGroup.ImageUpdateView)
 }

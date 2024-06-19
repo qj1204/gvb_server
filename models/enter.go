@@ -19,10 +19,19 @@ type RemoveRequest struct {
 	IDList []uint `json:"id_list"`
 }
 
+type IDRequest struct {
+	ID uint `json:"id" form:"id" uri:"id"`
+}
+
 type ESIDRequest struct {
 	ID string `json:"id" form:"id" uri:"id"`
 }
 
 type ESIDListRequest struct {
 	IDList []string `json:"id_list" binding:"required"`
+}
+
+type Options[T any] struct {
+	Label string `json:"label"`
+	Value T      `json:"value"`
 }

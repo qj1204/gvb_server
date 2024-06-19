@@ -7,7 +7,7 @@ import (
 
 type NewsRouter struct{}
 
-func (this *NewsRouter) InitNewsRouter(router *gin.RouterGroup) {
+func (NewsRouter) InitNewsRouter(router *gin.RouterGroup) {
 	apiGroup := api.ApiGroupApp.NewsApiGroup
-	router.POST("/news", apiGroup.NewsListView)
+	router.POST("news", apiGroup.NewsListView)
 }

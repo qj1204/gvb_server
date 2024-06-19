@@ -6,12 +6,21 @@ import (
 	"gorm.io/gorm"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
-	"gvb_server/service/redis"
+	"gvb_server/models/response"
+	"gvb_server/service/redis_service"
 	"slices"
 )
 
-func (this *CommentApi) CommentRemoveView(c *gin.Context) {
+// CommentRemoveView 删除评论
+// @Tags 评论管理
+// @Summary 删除评论
+// @Description 删除评论
+// @Param token header string  true  "token"
+// @Param id path int  true  "id"
+// @Router /api/comments/{id} [delete]
+// @Produce json
+// @Success 200 {object} response.Response{}
+func (CommentApi) CommentRemoveView(c *gin.Context) {
 	var cr CommentIDRequest
 	if err := c.ShouldBindUri(&cr); err != nil {
 		response.FailWithCode(gin.ErrorTypeBind, c)
@@ -27,10 +36,12 @@ func (this *CommentApi) CommentRemoveView(c *gin.Context) {
 	}
 
 	// 统计评论下的子评论数，再把自己算进去
-	var subCommentList []models.CommentModel
-	FindSubCommentCount(comment, &subCommentList)
+	//var subCommentList []models.CommentModel
+	//FindSubCommentCount(comment, &subCommentList)
+	subCommentList := FindAllSubCommentList(comment)
+	fmt.Println("subCommentList", subCommentList)
 	count := len(subCommentList) + 1
-	redis.NewArticleCommentCount().SetCount(comment.ArticleID, -count)
+	redis_service.NewArticleCommentCount().SetCount(comment.ArticleID, -count)
 
 	// 判断是否是子评论
 	if comment.ParentCommentID != nil { // 是子评论
@@ -50,15 +61,25 @@ func (this *CommentApi) CommentRemoveView(c *gin.Context) {
 	for _, id := range deleteCommentIDList {
 		global.DB.Delete(&models.CommentModel{}, id)
 		// 删除redis中的评论点赞数
-		redis.NewCommentDiggCount().Delete(fmt.Sprintf("%d", id))
+		redis_service.NewCommentDiggCount().Delete(fmt.Sprintf("%d", id))
 	}
 	response.OkWithMessage(fmt.Sprintf("共删除%d条评论", len(deleteCommentIDList)), c)
 }
 
-func FindSubCommentCount(rootComment models.CommentModel, subCommentList *[]models.CommentModel) {
-	global.DB.Preload("SubComments").Take(&rootComment)
-	for i := 0; i < len(rootComment.SubComments); i++ {
-		*subCommentList = append(*subCommentList, rootComment.SubComments[i])
-		FindSubComment(rootComment.SubComments[i], subCommentList)
+//func FindSubCommentCount(rootComment models.CommentModel, subCommentList *[]models.CommentModel) {
+//	global.DB.Preload("SubComments").Take(&rootComment)
+//	for i := 0; i < len(rootComment.SubComments); i++ {
+//		*subCommentList = append(*subCommentList, rootComment.SubComments[i])
+//		FindSubComment(rootComment.SubComments[i], subCommentList)
+//	}
+//}
+
+// FindAllSubCommentList 找一个评论的所有子评论，一维化
+func FindAllSubCommentList(comment models.CommentModel) (subList []models.CommentModel) {
+	global.DB.Preload("SubComments").Preload("User").Take(&comment)
+	for _, subComment := range comment.SubComments {
+		subList = append(subList, *subComment)
+		subList = append(subList, FindAllSubCommentList(*subComment)...)
 	}
+	return
 }

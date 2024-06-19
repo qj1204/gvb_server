@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
+	"gvb_server/models/response"
 	"gvb_server/plugins/email"
 	"gvb_server/utils/jwt"
 	"gvb_server/utils/pwd"

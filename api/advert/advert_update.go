@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
+	"gvb_server/models/response"
 )
 
 // AdvertUpdateView 更新广告
@@ -13,10 +13,12 @@ import (
 // @Summary 更新广告
 // @Description 更新广告
 // @Param data body AdvertRequest true "广告的一些参数"
-// @Router /api/advert/:id [put]
+// @Param token header string  true  "token"
+// @Param id path int  true  "id"
+// @Router /api/adverts/{id} [put]
 // @Produce json
 // @Success 200 {object} response.Response{data=string}
-func (this *AdvertApi) AdvertUpdateView(c *gin.Context) {
+func (AdvertApi) AdvertUpdateView(c *gin.Context) {
 	id := c.Param("id")
 	var cr AdvertRequest
 	err := c.ShouldBindJSON(&cr)

@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/ctype"
-	"gvb_server/models/common/response"
+	"gvb_server/models/ctype"
+	"gvb_server/models/response"
 	"gvb_server/plugins/qq"
 	"gvb_server/utils"
 	"gvb_server/utils/jwt"
@@ -13,7 +13,15 @@ import (
 	"gvb_server/utils/random"
 )
 
-func (this *UserApi) QQLoginView(c *gin.Context) {
+// QQLoginView qq登录，返回token，用户信息需要从token中解码
+// @Tags 用户管理
+// @Summary qq登录
+// @Description qq登录，返回token，用户信息需要从token中解码
+// @Param code query string  true  "qq登录的code"
+// @Router /api/qq_login [post]
+// @Produce json
+// @Success 200 {object} response.Response{}
+func (UserApi) QQLoginView(c *gin.Context) {
 	code := c.Query("code")
 	if code == "" {
 		response.FailWithMessage("code不能为空", c)

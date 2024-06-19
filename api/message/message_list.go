@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
+	"gvb_server/models/response"
 	"gvb_server/utils/jwt"
 	"time"
 )
@@ -21,7 +21,15 @@ type Msg struct {
 	MessageCount     int       `json:"message_count"` // 消息条数
 }
 
-func (this *MessageApi) MessageListView(c *gin.Context) {
+// MessageListView 用户与其他人的消息列表
+// @Tags 消息管理
+// @Summary 用户与其他人的消息列表
+// @Description 用户与其他人的消息列表
+// @Router /api/messages [get]
+// @Param token header string  true  "token"
+// @Produce json
+// @Success 200 {object} response.Response{data=[]models.MessageModel}
+func (MessageApi) MessageListView(c *gin.Context) {
 	_claims, _ := c.Get("claims")
 	claims := _claims.(*jwt.CustomClaims)
 

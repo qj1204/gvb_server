@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/ctype"
-	"gvb_server/models/common/response"
+	"gvb_server/models/ctype"
+	"gvb_server/models/response"
 )
 
 type ImageSort struct {
@@ -24,7 +24,16 @@ type MenuRequest struct {
 	ImageSortList []ImageSort `json:"image_sort_list" structs:"-"`                          // 具体图片的顺序
 }
 
-func (this *MenuApi) MenuCreateView(c *gin.Context) {
+// MenuCreateView 发布菜单
+// @Tags 菜单管理
+// @Summary 发布菜单
+// @Description 发布菜单
+// @Param data body MenuRequest  true  "查询参数"
+// @Param token header string  true  "token"
+// @Router /api/menus [post]
+// @Produce json
+// @Success 200 {object} response.Response{}
+func (MenuApi) MenuCreateView(c *gin.Context) {
 	var cr MenuRequest
 	err := c.ShouldBindJSON(&cr)
 	if err != nil {
@@ -78,5 +87,4 @@ func (this *MenuApi) MenuCreateView(c *gin.Context) {
 		return
 	}
 	response.OkWithMessage("菜单添加成功", c)
-
 }

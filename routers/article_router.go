@@ -8,19 +8,22 @@ import (
 
 type ArticleRouter struct{}
 
-func (this *ArticleRouter) InitArticleRouter(router *gin.RouterGroup) {
+func (ArticleRouter) InitArticleRouter(router *gin.RouterGroup) {
 	apiGroup := api.ApiGroupApp.ArticleApiGroup
-	router.POST("/article", middleware.JwtAdmin(), apiGroup.ArticleCreateView)
-	router.GET("/article", apiGroup.ArticleListView)
-	router.GET("/article/:id", apiGroup.ArticleDetailView)
-	router.GET("/article/detail", apiGroup.ArticleDetailByTitleView)
-	router.GET("/article/calendar", apiGroup.ArticleCalendarView)
-	router.GET("/article/tag", apiGroup.ArticleTagListView)
-	router.PUT("/article", middleware.JwtAdmin(), apiGroup.ArticleUpdateView)
-	router.DELETE("/article", middleware.JwtAdmin(), apiGroup.ArticleRemoveView)
-	router.POST("/article/digg", apiGroup.ArticleDiggView)
-	router.POST("/article/collect", middleware.JwtAuth(), apiGroup.ArticleCollectCreateView)
-	router.GET("/article/collect", middleware.JwtAuth(), apiGroup.ArticleCollectListView)
-	router.DELETE("/article/collect", middleware.JwtAuth(), apiGroup.ArticleCollectRemoveView)
-	router.GET("/article/text", apiGroup.FullTextSearchView)
+	router.POST("articles", middleware.JwtAdmin(), apiGroup.ArticleCreateView)
+	router.GET("articles", apiGroup.ArticleListView)
+	router.GET("article_id_title", apiGroup.ArticleIDTitleListView)
+	router.GET("articles/categorys", apiGroup.ArticleCategoryListView)
+	router.GET("articles/detail", apiGroup.ArticleDetailByTitleView)
+	router.GET("articles/calendar", apiGroup.ArticleCalendarView)
+	router.GET("articles/tags", apiGroup.ArticleTagListView)
+	router.PUT("articles", middleware.JwtAdmin(), apiGroup.ArticleUpdateView)
+	router.DELETE("articles", middleware.JwtAdmin(), apiGroup.ArticleRemoveView)
+	router.POST("articles/collects", middleware.JwtAuth(), apiGroup.ArticleCollectCreateView)
+	router.GET("articles/collects", middleware.JwtAuth(), apiGroup.ArticleCollectListView)
+	router.DELETE("articles/collects", middleware.JwtAuth(), apiGroup.ArticleCollectRemoveView)
+	router.GET("articles/content/:id", apiGroup.ArticleContentByIDView) // 文章内容
+	router.GET("articles/:id", apiGroup.ArticleDetailByIDView)
+	router.POST("articles/digg", apiGroup.ArticleDiggView)
+	router.GET("articles/text", apiGroup.FullTextSearchView)
 }

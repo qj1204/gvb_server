@@ -5,8 +5,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/ctype"
-	"gvb_server/models/common/response"
+	"gvb_server/models/ctype"
+	"gvb_server/models/response"
 	"gvb_server/plugins/log_stash"
 	"gvb_server/utils"
 	"gvb_server/utils/jwt"
@@ -18,7 +18,15 @@ type EmailLoginRequest struct {
 	Password string `json:"password" binding:"required" msg:"请输入密码"`
 }
 
-func (this *UserApi) EmailLoginView(c *gin.Context) {
+// EmailLoginView 邮箱登录，返回token，用户信息需要从token中解码
+// @Tags 用户管理
+// @Summary 邮箱登录
+// @Description 邮箱登录，返回token，用户信息需要从token中解码
+// @Param data body EmailLoginRequest  true  "查询参数"
+// @Router /api/email_login [post]
+// @Produce json
+// @Success 200 {object} response.Response{}
+func (UserApi) EmailLoginView(c *gin.Context) {
 	var cr EmailLoginRequest
 	err := c.ShouldBindJSON(&cr)
 	if err != nil {

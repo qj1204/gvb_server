@@ -5,22 +5,29 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	gs "github.com/swaggo/gin-swagger"
 	"gvb_server/global"
+	"gvb_server/middleware"
+	"net/http"
 )
 
 type RouterGroup struct {
-	SystemRouterGroup SystemRouter
-	ImageRouterGroup  ImageRouter
-	AdvertRouterGroup AdvertRouter
-	MenuRouterGroup   MenuRouter
-	UserRouterGroup   UserRouter
-	TagRouterGroup    TagRouter
-	MessageRouter     MessageRouter
-	ArticleRouter     ArticleRouter
-	CommentRouter     CommentRouter
-	NewsRouter        NewsRouter
-	ChatRouter        ChatRouter
-	LogRouter         LogRouter
-	DataRouter        DataRouter
+	SystemRouterGroup   SystemRouter
+	ImageRouterGroup    ImageRouter
+	AdvertRouterGroup   AdvertRouter
+	MenuRouterGroup     MenuRouter
+	UserRouterGroup     UserRouter
+	TagRouterGroup      TagRouter
+	MessageRouterGroup  MessageRouter
+	ArticleRouterGroup  ArticleRouter
+	CommentRouterGroup  CommentRouter
+	NewsRouterGroup     NewsRouter
+	ChatRouterGroup     ChatRouter
+	LogRouterGroup      LogRouter
+	DataRouterGroup     DataRouter
+	LogV2RouterGroup    LogV2Router
+	RoleRouterGroup     RoleRouter
+	GaodeRouterGroup    GaodeRouter
+	FeedbackRouterGroup FeedbackRouter
+	BigModelRouterGroup BigModelRouter
 }
 
 var RouterGroupApp = new(RouterGroup)
@@ -28,6 +35,8 @@ var RouterGroupApp = new(RouterGroup)
 func InitRouter() *gin.Engine {
 	gin.SetMode(global.Config.System.Env)
 	router := gin.Default()
+	router.Use(middleware.LogMiddleWare())
+	router.StaticFS("static", http.Dir("static"))
 	router.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))
 
 	apiRouterGroup := router.Group("/api")
@@ -38,13 +47,18 @@ func InitRouter() *gin.Engine {
 		RouterGroupApp.MenuRouterGroup.InitMenuRouter(apiRouterGroup)
 		RouterGroupApp.UserRouterGroup.InitUserRouter(apiRouterGroup)
 		RouterGroupApp.TagRouterGroup.InitTagRouter(apiRouterGroup)
-		RouterGroupApp.MessageRouter.InitMessageRouter(apiRouterGroup)
-		RouterGroupApp.ArticleRouter.InitArticleRouter(apiRouterGroup)
-		RouterGroupApp.CommentRouter.InitCommentRouter(apiRouterGroup)
-		RouterGroupApp.NewsRouter.InitNewsRouter(apiRouterGroup)
-		RouterGroupApp.ChatRouter.InitChatRouter(apiRouterGroup)
-		RouterGroupApp.LogRouter.InitLogRouter(apiRouterGroup)
-		RouterGroupApp.DataRouter.InitDataRouter(apiRouterGroup)
+		RouterGroupApp.MessageRouterGroup.InitMessageRouter(apiRouterGroup)
+		RouterGroupApp.ArticleRouterGroup.InitArticleRouter(apiRouterGroup)
+		RouterGroupApp.CommentRouterGroup.InitCommentRouter(apiRouterGroup)
+		RouterGroupApp.NewsRouterGroup.InitNewsRouter(apiRouterGroup)
+		RouterGroupApp.ChatRouterGroup.InitChatRouter(apiRouterGroup)
+		RouterGroupApp.LogRouterGroup.InitLogRouter(apiRouterGroup)
+		RouterGroupApp.DataRouterGroup.InitDataRouter(apiRouterGroup)
+		RouterGroupApp.LogV2RouterGroup.InitLogV2Router(apiRouterGroup)
+		RouterGroupApp.RoleRouterGroup.InitRoleRouter(apiRouterGroup)
+		RouterGroupApp.GaodeRouterGroup.InitGaodeRouter(apiRouterGroup)
+		RouterGroupApp.FeedbackRouterGroup.InitFeedbackRouter(apiRouterGroup)
+		RouterGroupApp.BigModelRouterGroup.InitBigModelRouter(apiRouterGroup)
 	}
 	return router
 }

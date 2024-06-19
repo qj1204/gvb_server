@@ -8,10 +8,11 @@ import (
 
 type TagRouter struct{}
 
-func (this *TagRouter) InitTagRouter(router *gin.RouterGroup) {
+func (TagRouter) InitTagRouter(router *gin.RouterGroup) {
 	apiGroup := api.ApiGroupApp.TagApiGroup
-	router.POST("/tag", middleware.JwtAdmin(), apiGroup.TagCreateView)
-	router.GET("/tag", middleware.JwtAdmin(), apiGroup.TagListView)
-	router.PUT("/tag/:id", middleware.JwtAdmin(), apiGroup.TagUpdateView)
-	router.DELETE("/tag", middleware.JwtAdmin(), apiGroup.TagRemoveView)
+	router.POST("tags", middleware.JwtAdmin(), apiGroup.TagCreateView)
+	router.GET("tags", apiGroup.TagListView)
+	router.GET("tag_names", apiGroup.TagNameListView)
+	router.PUT("tags/:id", middleware.JwtAdmin(), apiGroup.TagUpdateView)
+	router.DELETE("tags", middleware.JwtAdmin(), apiGroup.TagRemoveView)
 }

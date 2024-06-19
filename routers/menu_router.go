@@ -3,16 +3,18 @@ package routers
 import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/api"
+	"gvb_server/middleware"
 )
 
 type MenuRouter struct{}
 
-func (this *MenuRouter) InitMenuRouter(router *gin.RouterGroup) {
+func (MenuRouter) InitMenuRouter(router *gin.RouterGroup) {
 	apiGroup := api.ApiGroupApp.MenuApiGroup
-	router.POST("/menu", apiGroup.MenuCreateView)
-	router.GET("/menu", apiGroup.MenuListView)
-	router.GET("/menu_name", apiGroup.MenuNameListView)
-	router.GET("/menu/:id", apiGroup.MenuDetailView)
-	router.PUT("/menu/:id", apiGroup.MenuUpdateView)
-	router.DELETE("/menu", apiGroup.MenuRemoveView)
+	router.POST("menus", middleware.JwtAdmin(), apiGroup.MenuCreateView)
+	router.GET("menus", apiGroup.MenuListView)
+	router.GET("menu_names", apiGroup.MenuNameListView)
+	router.GET("menus/:id", apiGroup.MenuDetailView)
+	router.GET("menus/detail", apiGroup.MenuDetailByPathView)
+	router.PUT("menus/:id", middleware.JwtAdmin(), apiGroup.MenuUpdateView)
+	router.DELETE("menus", middleware.JwtAdmin(), apiGroup.MenuRemoveView)
 }

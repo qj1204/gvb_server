@@ -24,7 +24,7 @@ package image
 		}
 	}
 
-	var resList []image.FileUploadResponse
+	var resList []image_service.FileUploadResponse
 
 	for _, fileHeader := range fileHeaderList {
 		serviceRes := service.ServiceGroupApp.ImageService.ImageUploadService(fileHeader)

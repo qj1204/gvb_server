@@ -5,10 +5,19 @@ import (
 	"gvb_server/config"
 	"gvb_server/core"
 	"gvb_server/global"
-	"gvb_server/models/common/response"
+	"gvb_server/models/response"
 )
 
-func (this *SystemApi) SystemInfoUpdateView(c *gin.Context) {
+// SystemInfoUpdateView 修改某一项的配置信息
+// @Tags 系统管理
+// @Summary 修改某一项的配置信息
+// @Description 修改某一项的配置信息
+// @Param name path int  true  "name"
+// @Router /api/settings/{name} [put]
+// @Param token header string  true  "token"
+// @Produce json
+// @Success 200 {object} response.Response{}
+func (SystemApi) SystemInfoUpdateView(c *gin.Context) {
 	var cr SystemUri
 	err := c.ShouldBindUri(&cr)
 	if err != nil {
@@ -72,6 +81,25 @@ func (this *SystemApi) SystemInfoUpdateView(c *gin.Context) {
 			return
 		}
 		global.Config.ES = info
+	case "chat_group":
+		var info config.ChatGroup
+		err = c.ShouldBindJSON(&info)
+		if err != nil {
+			response.FailWithCode(gin.ErrorTypeBind, c)
+			return
+		}
+		global.Config.ChatGroup = info
+	case "gaode":
+		var info config.Gaode
+		err = c.ShouldBindJSON(&info)
+		if err != nil {
+			response.FailWithCode(gin.ErrorTypeBind, c)
+			return
+		}
+		if info.Key == "0d30676945160341fb0d614ef08d51ba" {
+			info.Key = global.Config.Gaode.Key
+		}
+		global.Config.Gaode = info
 	default:
 		response.FailWithMessage("未找到对应的配置", c)
 		return

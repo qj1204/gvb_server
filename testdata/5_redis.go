@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"gvb_server/core"
 	"gvb_server/global"
-	"gvb_server/service/redis"
+	"gvb_server/service/redis_service"
 )
 
 func main() {
@@ -18,8 +18,8 @@ func main() {
 	//keys, err := cmd.Result()
 	//fmt.Println(keys, err)
 
-	digg := redis.NewArticleDiggCount()
+	digg := redis_service.NewArticleDiggCount()
 	digg.Set("ZhKLDo4Beq8OFDNuzYQB")
 	fmt.Println(digg.GetInfo())
-	//redis.DiggClear()
+	//redis_service.DiggClear()
 }

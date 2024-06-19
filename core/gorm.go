@@ -15,6 +15,7 @@ func InitGorm() *gorm.DB {
 		return nil
 	}
 	dsn := global.Config.Mysql.Dsn()
+	fmt.Println(dsn)
 
 	var mysqlLogger logger.Interface
 	if global.Config.System.Env == "debug" {

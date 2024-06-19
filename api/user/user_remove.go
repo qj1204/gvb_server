@@ -6,10 +6,19 @@ import (
 	"gorm.io/gorm"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
+	"gvb_server/models/response"
 )
 
-func (this *UserApi) UserRemoveView(c *gin.Context) {
+// UserRemoveView 删除用户
+// @Tags 用户管理
+// @Summary 删除用户
+// @Description 删除用户
+// @Param data body models.RemoveRequest  true  "查询参数"
+// @Param token header string  true  "token"
+// @Router /api/users [delete]
+// @Produce json
+// @Success 200 {object} response.Response{}
+func (UserApi) UserRemoveView(c *gin.Context) {
 	var cr models.RemoveRequest
 	err := c.ShouldBindJSON(&cr)
 	if err != nil {

@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
+	"gvb_server/models/response"
 )
 
 type ImageResponse struct {
@@ -20,7 +20,7 @@ type ImageResponse struct {
 // @Router /api/image_name [get]
 // @Produce json
 // @Success 200 {object} response.Response{data=[]ImageResponse}
-func (this *ImageApi) ImageNameListView(c *gin.Context) {
+func (ImageApi) ImageNameListView(c *gin.Context) {
 	var imageList []ImageResponse
 	global.DB.Model(&models.BannerModel{}).Select("id, path, name").Scan(&imageList)
 	response.OkWithData(imageList, c)

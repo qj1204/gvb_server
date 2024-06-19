@@ -3,8 +3,8 @@ package flag
 import (
 	"fmt"
 	"gvb_server/global"
-	"gvb_server/models/common/ctype"
-	"gvb_server/service/user"
+	"gvb_server/models/ctype"
+	"gvb_server/service/user_service"
 )
 
 func CreateUser(permission string) {
@@ -37,7 +37,7 @@ func CreateUser(permission string) {
 	if permission == "admin" {
 		role = ctype.PermissionAdmin
 	}
-	s := &user.UserService{}
+	s := &user_service.UserService{}
 	err := s.CreateUser(nickName, userName, password, role, email, "127.0.0.1")
 	if err != nil {
 		global.Log.Error("创建用户失败", err)

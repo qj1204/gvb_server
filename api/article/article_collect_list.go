@@ -7,8 +7,8 @@ import (
 	"github.com/olivere/elastic/v7"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
-	"gvb_server/service/common"
+	"gvb_server/models/response"
+	"gvb_server/service/common_service"
 	"gvb_server/utils/jwt"
 )
 
@@ -17,8 +17,16 @@ type CollectResponse struct {
 	CreatedAt string `json:"created_at"`
 }
 
-// ArticleCollectListView 收藏文章列表
-func (this *ArticleApi) ArticleCollectListView(c *gin.Context) {
+// ArticleCollectListView 用户收藏的文章列表
+// @Tags 文章管理
+// @Summary 用户收藏的文章列表
+// @Description 用户收藏的文章列表
+// @Param data query models.Page  true  "表示多个参数"
+// @Param token header string  true  "token"
+// @Router /api/articles/collects [get]
+// @Produce json
+// @Success 200 {object} response.Response{data=response.ListResponse[CollectResponse]}
+func (ArticleApi) ArticleCollectListView(c *gin.Context) {
 	var cr models.Page
 	if err := c.ShouldBindQuery(&cr); err != nil {
 		response.FailWithCode(gin.ErrorTypeBind, c)
@@ -28,7 +36,7 @@ func (this *ArticleApi) ArticleCollectListView(c *gin.Context) {
 	claims := _claims.(*jwt.CustomClaims)
 
 	var articleIDList []any
-	list, count, err := common.CommonList(&models.UserCollectModel{UserID: claims.UserID}, common.Option{
+	list, count, err := common_service.CommonList(&models.UserCollectModel{UserID: claims.UserID}, common_service.Option{
 		Page:  cr,
 		Debug: true,
 	})

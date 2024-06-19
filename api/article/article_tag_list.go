@@ -7,7 +7,7 @@ import (
 	"github.com/olivere/elastic/v7"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
+	"gvb_server/models/response"
 )
 
 type TagsResponse struct {
@@ -34,7 +34,15 @@ type TagsType struct {
 	} `json:"buckets"`
 }
 
-func (this *ArticleApi) ArticleTagListView(c *gin.Context) {
+// ArticleTagListView 标签文章列表
+// @Tags 文章管理
+// @Summary 标签文章列表
+// @Description 标签文章列表
+// @Param data query models.Page   false  "表示多个参数"
+// @Router /api/articles/tags [get]
+// @Produce json
+// @Success 200 {object} response.Response{data=response.ListResponse[TagsResponse]}
+func (ArticleApi) ArticleTagListView(c *gin.Context) {
 	// 需要返回的数据形式
 	// [{"tag":"go", "article_count": 2, "article_list": [YBJoDo4Beq8OFDNutYS1, YRJpDo4Beq8OFDNulYR4]}]
 

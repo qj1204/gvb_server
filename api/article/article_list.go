@@ -5,8 +5,8 @@ import (
 	"github.com/liu-cn/json-filter/filter"
 	"gvb_server/global"
 	"gvb_server/models"
-	"gvb_server/models/common/response"
-	"gvb_server/service/es"
+	"gvb_server/models/response"
+	"gvb_server/service/es_service"
 )
 
 type ArticleSearchRequest struct {
@@ -14,13 +14,22 @@ type ArticleSearchRequest struct {
 	Tag string `json:"tag" form:"tag"`
 }
 
-func (this *ArticleApi) ArticleListView(c *gin.Context) {
+// ArticleListView 文章列表
+// @Tags 文章管理
+// @Summary 文章列表
+// @Description 文章列表
+// @Param data query ArticleSearchRequest   false  "表示多个参数"
+// @Param token header string  false  "token"
+// @Router /api/articles [get]
+// @Produce json
+// @Success 200 {object} response.Response{data=response.ListResponse[models.ArticleModel]}
+func (ArticleApi) ArticleListView(c *gin.Context) {
 	var cr ArticleSearchRequest
 	if err := c.ShouldBindQuery(&cr); err != nil {
 		response.FailWithCode(gin.ErrorTypeBind, c)
 		return
 	}
-	list, count, err := es.CommonList(es.Option{
+	list, count, err := es_service.CommonList(es_service.Option{
 		Page:   cr.Page,
 		Fields: []string{"title", "abstract", "content"},
 		Tag:    cr.Tag,
