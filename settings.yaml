@@ -36,13 +36,13 @@ upload:
   size: 2
   path: uploads/file
 qq:
-  app_id: xxxxx
-  key: xxxxx
+  app_id: 102112654
+  key: hJhrpa7PTKwKxNZX
   redirect: https://www.xiaoxinqj.fun/login?flag=qq
 qi_niu:
   enable: true
-  access_key: xxxxx
-  secret_key: xxxxx
+  access_key: lWi_q36PtaaEnIzcOKy-yFmK1VmbOIQY_ygsOiHF
+  secret_key: LbjcW0Bdy7u11R8lIDJ72cq6kAUuWkYhaXTvNu2m
   bucket: xiaoxinqj
   cdn: https://qiniu.xiaoxinqj.fun/
   zone: z2
@@ -52,7 +52,7 @@ email:
   host: smtp.qq.com
   port: 465
   user: 1429030919@qq.com
-  password: xxxxx
+  password: mtzlanmdmtcwhbae
   default_from_email: 小新
   use_ssl: true
   user_tls: false
@@ -85,13 +85,13 @@ chat_group:
   isMd: true
 gaode:
   enable: true
-  key: xxxxx
+  key: 0d30676945160341fb0d614ef08d51ba
 big-model:
   setting:
     name: qwen
     enable: true
     order: 4
-    api-key: sk-xxxxx
+    api-key: sk-2173f0d314cd444bbaf9bddd89d1e485
     api-secret: ""
     title: 小新千问
     prompt: You are a helpful assistant.
